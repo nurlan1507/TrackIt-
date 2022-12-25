@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-
+    <style name="text_sm_small" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/robotolight</item>
+        <item name="android:textSize">14sp</item>
+    </style>
     <style name="text_sm_normal" parent="TextAppearance.AppCompat">
         <item name="android:fontFamily">@font/robotolight</item>
         <item name="android:textSize">14sp</item>
@@ -18,14 +21,18 @@
 
 
 
-
+    <style name="text_xl_small" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/robotobold</item>
+        <item name="android:textSize">40sp</item>
+        <item name="android:fontWeight">700</item>
+    </style>
     <style name="text_xl_normal" parent="TextAppearance.AppCompat">
-        <item name="android:fontFamily">@font/robotobolditalic</item>
+        <item name="android:fontFamily">@font/robotomedium</item>
         <item name="android:textSize">40sp</item>
         <item name="android:fontWeight">700</item>
     </style>
     <style name="text_xl_large" parent="TextAppearance.AppCompat">
-        <item name="android:fontFamily">@font/robotobolditalic</item>
+        <item name="android:fontFamily">@font/robotobold</item>
         <item name="android:textSize">50sp</item>
         <item name="android:fontWeight">700</item>
     </style>
@@ -37,7 +44,10 @@
 
 
 
-
+    <style name="text_link_small" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/robotolightitalic</item>
+        <item name="android:textSize">15sp</item>
+    </style>
     <style name="text_link_normal" parent="TextAppearance.AppCompat">
         <item name="android:fontFamily">@font/robotolightitalic</item>
         <item name="android:textSize">15sp</item>
@@ -50,5 +60,37 @@
         <item name="android:fontFamily">@font/robotolightitalic</item>
         <item name="android:textSize">30sp</item>
     </style>
+
+
+
+
+    <style name="button_small" parent="Widget.AppCompat.Button">
+        <item name="android:textSize">4sp</item>
+        <item name="android:layout_width">30dp</item>
+        <item name="android:layout_height">10dp</item>
+        <item name="android:background">@drawable/rounded_button</item>
+    </style>
+    <style name="button_normal" parent="Widget.AppCompat.Button">
+        <item name="android:textSize">14sp</item>
+        <item name="android:layout_width">200dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/rounded_button</item>
+    </style>
+    <style name="button_large" parent="Widget.AppCompat.Button">
+        <item name="android:textSize">18sp</item>
+        <item name="android:layout_width">200dp</item>
+        <item name="android:layout_height">60dp</item>
+        <item name="android:background">@drawable/rounded_button</item>
+    </style>
+    <style name="button_xlarge" parent="Widget.AppCompat.Button">
+        <item name="android:textSize">30sp</item>
+        <item name="android:layout_width">400dp</item>
+        <item name="android:layout_height">90dp</item>
+        <item name="android:background">@drawable/rounded_button</item>
+    </style>
+
+
+
+
 
 </resources>

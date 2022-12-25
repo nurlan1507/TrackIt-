@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">trackit</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="email_hint">Email</string>
     <string name="password_hint">Password</string>
@@ -10,4 +9,10 @@
     <string name="login_greetings">Good Day!</string>
     <string name="login_sub_header">Enter your email and password</string>
     <string name="login_btn">Login</string>
+    <string name="dont_have_account">No account?</string>
+    <string name="register_btn">Register</string>
+    <string name="login_google">Sign in with google</string>
+    <string name="registration_header">Registration</string>
+    <string name="registration_sub_header">Fill all forms to register account</string>
+    <string name="have_account">Have account?</string>
 </resources>
