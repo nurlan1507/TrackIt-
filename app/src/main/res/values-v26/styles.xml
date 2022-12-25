@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+    <style name="text_sm_normal" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/robotolight</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+    <style name="text_sm_large" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/robotolight</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+    <style name="text_sm_xlarge" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/robotolight</item>
+        <item name="android:textSize">27sp</item>
+    </style>
+
+
+
+
+
+    <style name="text_xl_normal" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/robotobolditalic</item>
+        <item name="android:textSize">40sp</item>
+        <item name="android:fontWeight">700</item>
+    </style>
+    <style name="text_xl_large" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/robotobolditalic</item>
+        <item name="android:textSize">50sp</item>
+        <item name="android:fontWeight">700</item>
+    </style>
+    <style name="text_xl_xlarge" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/robotobold</item>
+        <item name="android:textSize">80sp</item>
+        <item name="android:fontWeight">700</item>
+    </style>
+
+
+
+
+    <style name="text_link_normal" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/robotolightitalic</item>
+        <item name="android:textSize">15sp</item>
+    </style>
+    <style name="text_link_large" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/robotolightitalic</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+    <style name="text_link_xlarge" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/robotolightitalic</item>
+        <item name="android:textSize">30sp</item>
+    </style>
+
+</resources>

@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">trackit</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="email_hint">Email</string>
+    <string name="password_hint">Password</string>
+    <string name="confirm_password_hint">Repeat password</string>
+    <string name="reset_password">Forgot password?</string>
+    <string name="username_hint">Username</string>
+    <string name="login_greetings">Good Day!</string>
+    <string name="login_sub_header">Enter your email and password</string>
+    <string name="login_btn">Login</string>
+</resources>
