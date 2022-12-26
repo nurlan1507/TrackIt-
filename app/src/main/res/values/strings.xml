@@ -15,4 +15,12 @@
     <string name="registration_header">Registration</string>
     <string name="registration_sub_header">Fill all forms to register account</string>
     <string name="have_account">Have account?</string>
+
+
+    <string name="email_error">The email address is badly formatted.</string>
+    <string name="password_error">Password must be longer than 6 elements and contain al least one digit</string>
+    <string name="password_confirmation_error">Passwords do not match</string>
+    <string name="empty_error">Please fill that form</string>
+    <string name="username_to_short">Username should contain at least 6 elements</string>
+    <string name="username_to_long">Username can not be more than 30 characters</string>
 </resources>
