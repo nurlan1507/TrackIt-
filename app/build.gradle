@@ -33,6 +33,7 @@ android {
     }
     buildFeatures{
         viewBinding true
+        dataBinding true
     }
 }
 
@@ -56,5 +57,12 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth-ktx'
     implementation 'com.google.firebase:firebase-firestore-ktx'
 
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.1.1'
 
+// ViewModel
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1"
+
+// LiveData
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.5.1"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.5.1"
 }

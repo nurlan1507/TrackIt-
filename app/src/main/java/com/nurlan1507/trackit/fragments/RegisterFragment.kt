@@ -6,10 +6,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
+import com.nurlan1507.trackit.R
 import com.nurlan1507.trackit.databinding.FragmentRegisterBinding
 import com.nurlan1507.trackit.repositories.AuthRepository
 import com.nurlan1507.trackit.viewmodels.UserViewModel
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class RegisterFragment : Fragment() {
     private lateinit var _binding:FragmentRegisterBinding
@@ -31,14 +36,20 @@ class RegisterFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val email = binding.inputEmail.text.toString()
+        val password = binding.inputPassword!!.text.toString()
+        val username = binding.inputUsername!!.text.toString()
+        val passwordConfirmation = binding.inputPasswordConfirm!!.text.toString()
         binding.registerBtn?.setOnClickListener {
-            val email = binding.inputEmail
-            val password = binding.inputPassword!!
-            val username = binding.inputUsername!!
-            val passwordConfirmation = binding.inputPasswordConfirm!!
-            viewModel.register(email,username,password,passwordConfirmation)
-
+            GlobalScope.launch {
+                val isSuccess = viewModel.register(email,username,password,passwordConfirmation)
+                if(isSuccess){
+                    findNavController().navigate(R.id.action_registerFragment_to_homeFragment)
+                }
+            }
         }
     }
+
+
 
 }
