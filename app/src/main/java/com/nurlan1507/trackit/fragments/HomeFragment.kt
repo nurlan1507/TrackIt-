@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
@@ -22,9 +23,7 @@ class HomeFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mAuth = FirebaseAuth.getInstance()
-        if(mAuth.currentUser ==null){
-            findNavController().navigate(R.id.action_homeFragment_to_loginFragment)
-        }
+        (activity as AppCompatActivity).supportActionBar?.show()
     }
 
 
@@ -40,8 +39,7 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.apply {
             viewModel = userViewModel
-            name.text = userViewModel.user.value?.email
-
+            lifecycleOwner = viewLifecycleOwner
         }
         binding.logoutBtn.setOnClickListener {
             if(mAuth.currentUser!=null){

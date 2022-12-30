@@ -1,12 +1,15 @@
 package com.nurlan1507.trackit.viewmodels
-
 import android.util.Log
 import android.util.Patterns
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.android.gms.auth.api.identity.SignInClient
+import com.google.android.gms.auth.api.identity.SignInCredential
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.material.textfield.TextInputEditText
+import com.google.firebase.auth.FirebaseUser
 import com.nurlan1507.trackit.data.User
 import com.nurlan1507.trackit.repositories.AuthRepository
 import com.nurlan1507.trackit.repositories.*
@@ -28,14 +31,14 @@ class UserViewModel:ViewModel() {
     private fun setUser(newUser:User){
         _user.value=newUser
     }
-    init{
-        val res = repository.getCurrentUser()
-        if(res is Success){
-            _user.value = res.user
-        }else if(res is Failure){
-            setError(res.error)
-        }
-    }
+//    init{
+//        val res = repository.getCurrentUser()
+//        if(res is Success){
+//            _user.value = res.user
+//        }else if(res is Failure){
+//            setError(res.error)
+//        }
+//    }
 
 
 
@@ -44,6 +47,7 @@ class UserViewModel:ViewModel() {
             val result = repository.emailPasswordSignIn(email,password)
             if(result == null){
                 Log.d("LOX", "ебать ты лох братуха")
+                return@launch
             }
             if(result is Success){
                 setUser(result.user)
@@ -56,17 +60,33 @@ class UserViewModel:ViewModel() {
 
     }
 
-    suspend fun register(email: String, username: String, password: String, repeatPassword:String):Boolean{
-        val result = repository.emailPasswordSignUp(email,username,password)
-        if(result is Success){
-            _user.value = result.user
-            return true
-        }else if(result is Failure){
-            _userSignInErrorLiveData.value = result.error
+    suspend fun register(email: String, username: String, password: String, repeatPassword:String){
+        viewModelScope.launch {
+            val result = repository.emailPasswordSignUp(email,username,password)
+            if(result is Success){
+                setUser(result.user)
+            }else if(result is Failure){
+                setError(result.error)
+            }
         }
-        return false
     }
 
+    suspend fun googleOauth(uid:String?, account:GoogleSignInAccount){
+
+        viewModelScope.launch {
+            if(uid!=null){
+                val result = repository.googleAuth(uid,account)
+                if(result is Success){
+                    _user.value = result.user
+                }
+            }else{
+                return@launch
+            }
+        }
+
+
+
+    }
 
 
 

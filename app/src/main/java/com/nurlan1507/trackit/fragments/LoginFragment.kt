@@ -1,19 +1,33 @@
 package com.nurlan1507.trackit.fragments
 
-import  android.content.Context
+import android.app.Activity
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContract
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import com.google.android.gms.auth.api.identity.BeginSignInRequest
+import com.google.android.gms.auth.api.identity.Identity
+import com.google.android.gms.auth.api.identity.SignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.auth.GoogleAuthProvider
 import com.nurlan1507.trackit.R
 import com.nurlan1507.trackit.databinding.FragmentLoginBinding
 import com.nurlan1507.trackit.helpers.validateEmail
@@ -26,14 +40,32 @@ class LoginFragment : Fragment() {
     val binding get() = _binding
     private val userViewModel:UserViewModel by activityViewModels()
     private val auth = FirebaseAuth.getInstance()
+
+    private lateinit var onTapClient: SignInClient
+    private lateinit var signInRequest: BeginSignInRequest
+
+    private lateinit var gso:GoogleSignInOptions
+    private lateinit var gsoClient:GoogleSignInClient
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         (activity as AppCompatActivity).supportActionBar?.hide()
         userViewModel._userSignInErrorLiveData.observe(this, Observer {
             binding.authErrorMessage?.visibility = View.VISIBLE
             binding.authErrorMessage?.text = it
-            Toast.makeText(requireContext(), "OPANA", Toast.LENGTH_SHORT).show()
         })
+        onTapClient =  Identity.getSignInClient(requireContext())
+        signInRequest = BeginSignInRequest.builder()
+            .setGoogleIdTokenRequestOptions(
+                BeginSignInRequest.GoogleIdTokenRequestOptions.builder()
+                    .setSupported(true)
+                    .setServerClientId(getString(R.string.default_web_client_id))
+                    .build())
+            .build()
+
+
+        gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().requestIdToken(getString(R.string.default_web_client_id)).build()
+        gsoClient =  GoogleSignIn.getClient(activity as AppCompatActivity,gso)
 
     }
 
@@ -68,7 +100,55 @@ class LoginFragment : Fragment() {
             findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
         }
 
+        binding.loginGoogleBtn.setOnClickListener {
+            googleSignIn()
 
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+    @OptIn(DelicateCoroutinesApi::class)
+    private fun handleSignInResult(completedTask: Task<GoogleSignInAccount>) {
+        try {
+            val account = completedTask.result
+            val credentials = GoogleAuthProvider.getCredential(account.idToken, null)
+            FirebaseAuth.getInstance().signInWithCredential(credentials).addOnCompleteListener {
+                if(it.isSuccessful){
+                    GlobalScope.launch{
+                        userViewModel.googleOauth(it.result.user?.uid, account)
+                    }
+                    findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
+                }else{
+                    Toast.makeText(requireContext(),it.exception?.message,Toast.LENGTH_SHORT).show()
+                }
+            }
+        } catch (e: ApiException) {
+            Toast.makeText(requireContext(),e.message, Toast.LENGTH_SHORT).show()
+        }
+    }
+    private fun googleSignIn(){
+        gsoClient.signOut()
+        val signInIntent:Intent = gsoClient.signInIntent
+        launcher.launch(signInIntent)
+    }
+
+    private val launcher  = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
+        result ->
+            if(result.resultCode == Activity.RESULT_OK){
+                val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
+                handleSignInResult(task)
+            }
+            else{
+                Toast.makeText(requireContext(),"error +"+result.resultCode.toString(),Toast.LENGTH_SHORT).show()
+            }
     }
 
 }

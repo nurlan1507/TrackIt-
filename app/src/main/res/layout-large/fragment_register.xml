@@ -16,14 +16,14 @@
             android:id="@+id/registration_header"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/text_xl_large"
+            style="@style/text_xl_normal"
             android:text="@string/registration_header"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
         <TextView
             android:id="@+id/registration_sub_header"
-            style="@style/text_sm_large"
+            style="@style/text_sm_normal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/registration_sub_header"
@@ -75,7 +75,7 @@
                 android:id="@+id/input_username"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textPassword"
+                android:inputType="text"
                 android:drawableLeft="@drawable/ic_outline_account_circle_24"
                 android:drawablePadding="25dp"
                 />
@@ -135,7 +135,7 @@
 
         <Button
             android:id="@+id/register_btn"
-            style="@style/button_large"
+            style="@style/button_normal"
             android:text="@string/register_btn"
             android:layout_marginTop="30dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -155,14 +155,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/have_account"
-                style="@style/text_sm_large"
+                style="@style/text_sm_normal"
                 />
             <TextView
                 android:id="@+id/link_to_login"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/login_btn"
-                style="@style/text_sm_large"
+                style="@style/text_sm_normal"
                 android:textStyle="bold"
                 />
         </LinearLayout>
