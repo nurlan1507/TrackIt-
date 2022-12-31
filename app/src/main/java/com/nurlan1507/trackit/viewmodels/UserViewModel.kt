@@ -71,21 +71,17 @@ class UserViewModel:ViewModel() {
         }
     }
 
-    suspend fun googleOauth(uid:String?, account:GoogleSignInAccount){
-
+    suspend fun googleOauth(uid:String?, account:GoogleSignInAccount) {
         viewModelScope.launch {
-            if(uid!=null){
-                val result = repository.googleAuth(uid,account)
-                if(result is Success){
+            if (uid != null) {
+                val result = repository.googleAuth(uid, account)
+                if (result is Success) {
                     _user.value = result.user
                 }
-            }else{
+            } else {
                 return@launch
             }
         }
-
-
-
     }
 
 

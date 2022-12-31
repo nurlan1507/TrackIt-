@@ -1,16 +1,13 @@
 package com.nurlan1507.trackit.repositories
 
 import android.util.Log
-import com.google.android.gms.auth.api.identity.SignInCredential
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthEmailException
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.toObject
 import com.nurlan1507.trackit.data.User
@@ -27,11 +24,11 @@ class AuthRepository {
         try{
             val authRes = mAuth.createUserWithEmailAndPassword(email,password).await()
             if(authRes.user!= null){
-                var newUser = User(email,username)
+                val newUser = User(email,username)
+                authRes.user!!.sendEmailVerification()
                 db.document(authRes.user!!.uid).set(newUser).await()
                 result = Success(newUser)
             }
-            Log.d("AUTHRES",authRes.user?.email.toString())
         }catch (e:Exception){
             result = Failure(onError(e))
         }
@@ -49,10 +46,6 @@ class AuthRepository {
             result = Failure(onError(e))
         }
         return result
-    }
-
-    fun googleSignIn(){
-
     }
 
 

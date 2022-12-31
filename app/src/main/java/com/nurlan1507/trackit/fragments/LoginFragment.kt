@@ -1,17 +1,23 @@
 package com.nurlan1507.trackit.fragments
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
+import android.opengl.Visibility
 import android.os.Bundle
+import android.text.InputType
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
+import android.widget.LinearLayout
+import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.marginTop
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
@@ -25,7 +31,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
-import com.google.firebase.auth.AuthCredential
+import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.nurlan1507.trackit.R
@@ -50,10 +56,6 @@ class LoginFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         (activity as AppCompatActivity).supportActionBar?.hide()
-        userViewModel._userSignInErrorLiveData.observe(this, Observer {
-            binding.authErrorMessage?.visibility = View.VISIBLE
-            binding.authErrorMessage?.text = it
-        })
         onTapClient =  Identity.getSignInClient(requireContext())
         signInRequest = BeginSignInRequest.builder()
             .setGoogleIdTokenRequestOptions(
@@ -68,7 +70,6 @@ class LoginFragment : Fragment() {
         gsoClient =  GoogleSignIn.getClient(activity as AppCompatActivity,gso)
 
     }
-
 
 
     override fun onCreateView(
@@ -90,10 +91,14 @@ class LoginFragment : Fragment() {
             if(binding.inputPassword.text.toString().isEmpty())return@setOnClickListener
             GlobalScope.launch {
                 userViewModel.login(binding.inputEmail.text.toString(),binding.inputPassword.text.toString())
-
             }
-            Toast.makeText(requireContext(),"${auth.currentUser?.email}",Toast.LENGTH_SHORT).show()
+            if(auth.currentUser == null){
+                binding.authErrorMessage?.visibility = View.VISIBLE
+                binding.authErrorMessage?.text = userViewModel.userSignInErrorLiveData.value
+                return@setOnClickListener
+            }
             findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
+
         }
 
         binding.linkToRegister.setOnClickListener {
@@ -102,10 +107,43 @@ class LoginFragment : Fragment() {
 
         binding.loginGoogleBtn.setOnClickListener {
             googleSignIn()
+        }
 
+        binding.resetPasswordLink.setOnClickListener {
+            invokeDialog()
         }
     }
 
+
+
+    private fun invokeDialog(){
+        val view:View = layoutInflater.inflate(R.layout.reset_password_dialog,null)
+        val input:TextInputEditText = view.findViewById(R.id.dialog_email_input)
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setView(view)
+        builder.setPositiveButton("Reset password") { dialog, which ->
+            //Do nothing here because we override this button later to change the close behaviour.
+            //However, we still need this because on older versions of Android unless we
+            //pass a handler the button doesn't get instantiated
+        }
+              .setNegativeButton("Exit",null)
+        val alertDialog:AlertDialog = builder.create()
+        alertDialog.show()
+        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+            var toClose = false
+            if(input.text.toString().isEmpty()){
+                input.error = "Provide yout email address"
+                input.requestFocus()
+            }else{
+                toClose = true
+            }
+            if(toClose){
+                FirebaseAuth.getInstance().sendPasswordResetEmail(input.text.toString())
+                Toast.makeText(requireContext(), "We have sent you a link to email!", Toast.LENGTH_LONG).show()
+                alertDialog.dismiss()
+            }
+        }
+    }
 
 
 

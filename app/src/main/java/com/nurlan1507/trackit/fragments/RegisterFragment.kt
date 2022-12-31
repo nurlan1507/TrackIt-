@@ -51,7 +51,7 @@ class RegisterFragment : Fragment() {
             }
             if(!validateUsername(binding.inputUsername))return@setOnClickListener
             GlobalScope.launch(Dispatchers.IO) {
-                viewModel.register( binding.inputEmail.text.toString(), binding.inputPassword.text.toString(),binding.inputUsername.text.toString(),binding.inputPasswordConfirm.text.toString())
+                viewModel.register( binding.inputEmail.text.toString(),binding.inputUsername.text.toString() ,binding.inputPassword.text.toString(),binding.inputPasswordConfirm.text.toString())
             }
             findNavController().navigate(R.id.action_registerFragment_to_homeFragment)
         }

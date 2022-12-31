@@ -106,19 +106,22 @@
         android:id="@+id/auth_error_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="LOLOL"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
         android:textColor="@color/error"
+
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/reset_password_link" />
+
     <Button
-        android:layout_marginTop="25dp"
         android:id="@+id/login_btn"
         style="@style/button_large"
         android:text="@string/login_btn"
+        android:layout_marginTop="15dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/reset_password_link" />
+        app:layout_constraintTop_toBottomOf="@+id/auth_error_message" />
 
     <LinearLayout
         android:id="@+id/linearLayout"
