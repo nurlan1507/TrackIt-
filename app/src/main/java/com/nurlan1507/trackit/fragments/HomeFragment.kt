@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+
 import com.google.firebase.auth.FirebaseAuth
 import com.nurlan1507.trackit.R
 import com.nurlan1507.trackit.databinding.FragmentHomeBinding
@@ -20,10 +21,11 @@ class HomeFragment : Fragment() {
     private lateinit var mAuth:FirebaseAuth
     private val userViewModel:UserViewModel by activityViewModels()
 
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mAuth = FirebaseAuth.getInstance()
-        (activity as AppCompatActivity).supportActionBar?.show()
     }
 
 
@@ -41,7 +43,7 @@ class HomeFragment : Fragment() {
             viewModel = userViewModel
             lifecycleOwner = viewLifecycleOwner
         }
-        binding.logoutBtn.setOnClickListener {
+        binding.logoutBtn?.setOnClickListener {
             if(mAuth.currentUser!=null){
                 mAuth.signOut()
             }else{

@@ -26,4 +26,10 @@
     <string name="empty_error">Please fill that form</string>
     <string name="username_to_short">Username should contain at least 6 elements</string>
     <string name="username_to_long">Username can not be more than 30 characters</string>
+
+
+    <string name="menu_home">Home</string>
+    <string name="menu_profile">Profile</string>
+
+
 </resources>
