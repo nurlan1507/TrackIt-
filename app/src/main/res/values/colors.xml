@@ -11,6 +11,7 @@
 
 
     <color name="blue_main">#197BDD</color>
+    <color name="blue_main_center">#3998F8</color>
     <color name="blue_main_variant">#06539F</color>
     <color name="blue_inactive">#6AAFF3</color>
     <color name="middle_gray">#959595</color>

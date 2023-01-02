@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <data>
+        <variable name="userviewmodel" type="com.nurlan1507.trackit.viewmodels.UserViewModel"/>
+    </data>
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -168,3 +172,4 @@
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
+</layout>

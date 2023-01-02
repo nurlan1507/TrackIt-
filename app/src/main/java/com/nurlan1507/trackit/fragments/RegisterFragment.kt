@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.nurlan1507.trackit.R
 import com.nurlan1507.trackit.databinding.FragmentRegisterBinding
@@ -33,6 +34,9 @@ class RegisterFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentRegisterBinding.inflate(inflater,container,false)
+        _binding.apply {
+            userviewmodel = viewModel
+        }
         return _binding.root
     }
 

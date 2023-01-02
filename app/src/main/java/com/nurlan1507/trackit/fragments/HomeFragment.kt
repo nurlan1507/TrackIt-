@@ -26,6 +26,10 @@ class HomeFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mAuth = FirebaseAuth.getInstance()
+        if(mAuth.currentUser==null){
+            findNavController().navigate(R.id.action_homeFragment_to_loginFragment)
+        }
+        (activity as AppCompatActivity).supportActionBar?.show()
     }
 
 
@@ -34,6 +38,9 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentHomeBinding.inflate(inflater,container,false)
+        _binding.apply {
+            viewModel = userViewModel
+        }
         return binding.root
     }
 

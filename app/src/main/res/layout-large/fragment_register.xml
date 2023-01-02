@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <data>
+        <variable name="userviewmodel" type="com.nurlan1507.trackit.viewmodels.UserViewModel"/>
+    </data>
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -166,5 +170,17 @@
                 android:textStyle="bold"
                 />
         </LinearLayout>
+        <TextView
+            android:id="@+id/register_error"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/text_sm_large"
+            android:textColor="@color/error"
+            android:text="@{userviewmodel.userSignUpErrorLiveData}"
+            app:layout_constraintTop_toBottomOf="@id/lin"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
+</layout>

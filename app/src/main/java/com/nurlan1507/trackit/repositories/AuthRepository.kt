@@ -66,20 +66,23 @@ class AuthRepository {
         }
     }
 
-//    fun getCurrentUser():Result?{
-//        val id = mAuth.currentUser?.uid
-//        var res:Result? = null
-//        if (id != null) {
-//            db.document(id).get()
-//                .addOnSuccessListener {
-//                    res = Success(it.toObject(User::class.java)!!)
-//                }
-//                .addOnFailureListener {
-//                    res = Failure("no user found")
-//                }
-//        }
-//        return res
-//    }
+    suspend fun getCurrentUser():Result?{
+        val id = mAuth.currentUser?.uid
+        var res:Result? = null
+        if(id!=null){
+            try{
+                val authRes =  db.document(id).get().await()
+                if(authRes!=null){
+                    res = Success(authRes.toObject<User>()!!)
+                }
+            }catch (e:Exception){
+                res = Failure(onError(e))
+                Log.d("SOSIBIBU",e.message.toString())
+            }
+        }
+
+        return res
+    }
 
     private suspend fun getUser(uid:String): Result?{
         var result:Result? = null
@@ -105,6 +108,10 @@ class AuthRepository {
                 result = Failure("Could not create user, please try again")
             }
         return result!!
+    }
+
+    fun logout(){
+        mAuth.signOut()
     }
 
 

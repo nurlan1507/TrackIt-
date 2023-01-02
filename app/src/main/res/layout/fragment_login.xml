@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 
+<layout>
+    <data>
+        <variable
+            name="viewmodel"
+            type="com.nurlan1507.trackit.viewmodels.UserViewModel" />
+    </data>
 <ScrollView
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -101,7 +107,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/reset_password_link"
-            android:visibility="gone"
+            android:text="@{viewmodel.userSignInErrorLiveData}"
             tools:text="Error" />
         <TextView
             android:id="@+id/reset_password_link"
@@ -175,3 +181,4 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
+</layout>
