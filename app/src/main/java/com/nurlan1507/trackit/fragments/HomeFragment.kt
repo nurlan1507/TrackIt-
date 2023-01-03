@@ -9,9 +9,12 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.RecyclerView
 
 import com.google.firebase.auth.FirebaseAuth
 import com.nurlan1507.trackit.R
+import com.nurlan1507.trackit.adapter.GridItemDecoration
+import com.nurlan1507.trackit.adapter.ProjectAdapter
 import com.nurlan1507.trackit.databinding.FragmentHomeBinding
 import com.nurlan1507.trackit.viewmodels.UserViewModel
 
@@ -50,15 +53,21 @@ class HomeFragment : Fragment() {
             viewModel = userViewModel
             lifecycleOwner = viewLifecycleOwner
         }
-        binding.logoutBtn?.setOnClickListener {
-            if(mAuth.currentUser!=null){
-                mAuth.signOut()
-            }else{
-                Toast.makeText(requireContext(),"You are already signed Oot!",Toast.LENGTH_SHORT ).show()
-            }
-            findNavController().navigate(R.id.action_homeFragment_to_loginFragment)
-            return@setOnClickListener
-        }
+
+        val recyclerView:RecyclerView = binding.projectsList
+        recyclerView.addItemDecoration(GridItemDecoration())
+        recyclerView.adapter = ProjectAdapter()
+
+
+//        binding.logoutBtn?.setOnClickListener {
+//            if(mAuth.currentUser!=null){
+//                mAuth.signOut()
+//            }else{
+//                Toast.makeText(requireContext(),"You are already signed Oot!",Toast.LENGTH_SHORT ).show()
+//            }
+//            findNavController().navigate(R.id.action_homeFragment_to_loginFragment)
+//            return@setOnClickListener
+//        }
     }
 
 }

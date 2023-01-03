@@ -10,28 +10,37 @@
                     type="com.nurlan1507.trackit.viewmodels.UserViewModel"
                     />
         </data>
-
-<androidx.constraintlayout.widget.ConstraintLayout
-
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".fragments.HomeFragment">
-
-        <!-- TODO: Update blank fragment layout -->
-        <TextView
-            android:id="@+id/name"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/fragment_home_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="@{viewModel.user.email}"
-            />
+            >
+                <TextView
+                    android:id="@+id/workflow_heading"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/your_projects"
+                    android:padding="10dp"
+                    style="@style/text_sm_normal"
+                    android:background="@drawable/shape_header"
+                    tools:text="@string/your_projects"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    />
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/projects_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="10dp"
+                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                    app:spanCount="2"
+                    app:layout_constraintTop_toBottomOf="@id/workflow_heading"
+                    app:layout_constraintStart_toStartOf="parent"
+                    tools:itemCount="6"
+                    tools:listitem="@layout/card_project"
+                    />
 
-        <Button
-            android:id="@+id/logout_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="log_out"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

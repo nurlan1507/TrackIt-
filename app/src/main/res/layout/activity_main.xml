@@ -9,26 +9,27 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
     >
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".MainActivity">
+
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="@style/Toolbar_normal"
+            app:layout_constraintTop_toTopOf="parent"
             />
-
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/nav_host"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:name="androidx.navigation.fragment.NavHostFragment"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbar"
             app:defaultNavHost="true"
             app:navGraph="@navigation/navigation" />
 <!--        style="@style/Toolbar_normal"-->

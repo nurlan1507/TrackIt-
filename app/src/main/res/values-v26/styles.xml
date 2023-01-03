@@ -125,4 +125,22 @@
     </style>
 
 
+
+
+    <style name="text_header_small" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">18sp</item>
+        <item name="android:fontFamily">@font/robotomedium</item>
+    </style>
+    <style name="text_header_normal" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">18sp</item>
+        <item name="android:fontFamily">@font/robotomedium</item>
+    </style>
+    <style name="text_header_large" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">21sp</item>
+        <item name="android:fontFamily">@font/robotomedium</item>
+    </style>
+    <style name="text_header_xlarge" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">18sp</item>
+        <item name="android:fontFamily">@font/robotomedium</item>
+    </style>
 </resources>

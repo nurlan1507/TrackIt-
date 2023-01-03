@@ -31,5 +31,7 @@
     <string name="menu_home">Home</string>
     <string name="menu_profile">Profile</string>
 
+    <string name="notifications">Notifications</string>
+    <string name="your_projects">Your current active projects</string>
 
 </resources>
