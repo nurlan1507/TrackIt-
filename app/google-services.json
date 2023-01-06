@@ -1,20 +1,20 @@
 {
   "project_info": {
-    "project_number": "81855007098",
-    "project_id": "trackit-f840b",
-    "storage_bucket": "trackit-f840b.appspot.com"
+    "project_number": "1022739792697",
+    "project_id": "trackit-11620",
+    "storage_bucket": "trackit-11620.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:81855007098:android:d0b00192e0e7f02b41aec3",
+        "mobilesdk_app_id": "1:1022739792697:android:b565401647334d689c1ee8",
         "android_client_info": {
           "package_name": "com.nurlan1507.trackit"
         }
       },
       "oauth_client": [
         {
-          "client_id": "81855007098-8vs633v519aautfjh2s1ha52flnt59t5.apps.googleusercontent.com",
+          "client_id": "1022739792697-uag13b518erolsfsddur4nfbcd104p8g.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.nurlan1507.trackit",
@@ -22,20 +22,20 @@
           }
         },
         {
-          "client_id": "81855007098-u1msqh7t3hefp2kn5g5sj6oq0prjua5c.apps.googleusercontent.com",
+          "client_id": "1022739792697-e3e9fn4kirnitduielm63r9vb4tg9o6j.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDM4gpXeiYi93heu-hwN7bxtyhbYjJBSu4"
+          "current_key": "AIzaSyDnUzOUXGpn_j4yt_OfAJazYYk_N2_5xT0"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "81855007098-u1msqh7t3hefp2kn5g5sj6oq0prjua5c.apps.googleusercontent.com",
+              "client_id": "1022739792697-e3e9fn4kirnitduielm63r9vb4tg9o6j.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

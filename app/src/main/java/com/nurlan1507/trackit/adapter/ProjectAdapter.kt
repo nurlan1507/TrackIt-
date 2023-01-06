@@ -4,13 +4,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.Recycler
-import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.nurlan1507.trackit.R
 import com.nurlan1507.trackit.data.Project
 import com.nurlan1507.trackit.databinding.CardProjectBinding
 
-class ProjectAdapter: RecyclerView.Adapter<ProjectAdapter.ProjectViewHolder>() {
+class ProjectAdapter(var onClickListener:(View,Project)->Unit): RecyclerView.Adapter<ProjectAdapter.ProjectViewHolder>() {
     val projects = listOf<Project>(
         Project("TrackIt!","Mobile app for tracking project progress", R.drawable.board_forest_background),
         Project("ChatApp!","ChatApp for communicate with friends", R.drawable.board_lake_background),
@@ -18,7 +16,7 @@ class ProjectAdapter: RecyclerView.Adapter<ProjectAdapter.ProjectViewHolder>() {
         Project("ChatApp!","ChatApp for communicate with friends", R.drawable.board_lake_background),
         Project("ChatApp!","ChatApp for communicate with friends", R.drawable.board_lake_background),
         Project("ChatApp!","ChatApp for communicate with friends", R.drawable.board_lake_background),
-        )
+    )
     inner class ProjectViewHolder(val binding: CardProjectBinding):RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProjectViewHolder {
@@ -32,9 +30,19 @@ class ProjectAdapter: RecyclerView.Adapter<ProjectAdapter.ProjectViewHolder>() {
             binding.projectTitle.text = projects.get(position).title
             binding.cardProjectImage.setImageResource(projects.get(position).image)
         }
+        holder.itemView.setOnLongClickListener{
+            onClickListener(it,projects.get(position))
+            true
+        }
+
+        holder.binding.starProjectBtn?.setOnClickListener {
+            onClickListener(it,projects.get(position))
+            true
+        }
     }
 
     override fun getItemCount(): Int {
         return projects.size
     }
+
 }

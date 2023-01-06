@@ -3,6 +3,7 @@ package com.nurlan1507.trackit
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuItem
+import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -83,6 +84,28 @@ class MainActivity : AppCompatActivity() {
                 }
                 else ->true
             }
+        }
+
+
+        _binding.toolbarAddBtn.setOnClickListener {
+            val popupMenu = PopupMenu(this, it)
+            popupMenu.menuInflater.inflate(R.menu.menu_add,popupMenu.menu)
+
+            popupMenu.setOnMenuItemClickListener { item->
+                when(item.itemId){
+                    R.id.menu_add_project ->{
+                        Toast.makeText(this,"LOL",Toast.LENGTH_LONG).show()
+                    }
+                    R.id.menu_add_task -> {
+
+                    }
+                    else ->{
+
+                    }
+                }
+                true
+            }
+            popupMenu.show()
         }
     }
 

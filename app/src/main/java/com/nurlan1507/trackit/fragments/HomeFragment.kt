@@ -1,16 +1,15 @@
 package com.nurlan1507.trackit.fragments
 
+import android.annotation.SuppressLint
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
-
 import com.google.firebase.auth.FirebaseAuth
 import com.nurlan1507.trackit.R
 import com.nurlan1507.trackit.adapter.GridItemDecoration
@@ -23,7 +22,6 @@ class HomeFragment : Fragment() {
     val binding get() = _binding
     private lateinit var mAuth:FirebaseAuth
     private val userViewModel:UserViewModel by activityViewModels()
-
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,18 +54,45 @@ class HomeFragment : Fragment() {
 
         val recyclerView:RecyclerView = binding.projectsList
         recyclerView.addItemDecoration(GridItemDecoration())
-        recyclerView.adapter = ProjectAdapter()
-
-
-//        binding.logoutBtn?.setOnClickListener {
-//            if(mAuth.currentUser!=null){
-//                mAuth.signOut()
-//            }else{
-//                Toast.makeText(requireContext(),"You are already signed Oot!",Toast.LENGTH_SHORT ).show()
-//            }
-//            findNavController().navigate(R.id.action_homeFragment_to_loginFragment)
-//            return@setOnClickListener
-//        }
+        recyclerView.adapter = ProjectAdapter {
+            it,project->
+            val popupMenu = PopupMenu(requireContext(),it)
+            popupMenu.menuInflater.inflate(R.menu.project_long_menu,popupMenu.menu)
+            popupMenu.setOnMenuItemClickListener {
+                when(it.itemId){
+                    R.id.leave_project ->
+                        Toast.makeText(requireContext(),"Leave project", Toast.LENGTH_SHORT).show()
+                    R.id.invitation_link ->
+                        Toast.makeText(requireContext(),"invitation link", Toast.LENGTH_LONG).show()
+                    R.id.add_to_favorites ->
+                        Toast.makeText(requireContext(),"addtofavoriites", Toast.LENGTH_SHORT).show()
+                }
+                true
+            }
+            if(project.title == "TrackIt!"){
+                popupMenu.menu.removeItem(R.id.add_to_favorites)
+                popupMenu.menu.add(1, R.id.add_to_favorites, 1  ,"remove from favorites")
+            }
+            popupMenu.show()
+        }
     }
 
+
+    @SuppressLint("RestrictedApi")
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.menu_toolbar,menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            R.id.leave_project ->
+                Toast.makeText(requireContext(),"Leave project", Toast.LENGTH_SHORT).show()
+            R.id.invitation_link ->
+                Toast.makeText(requireContext(),"invitation link", Toast.LENGTH_LONG).show()
+            R.id.add_to_favorites ->
+                Toast.makeText(requireContext(),"addtofavoriites", Toast.LENGTH_SHORT).show()
+        }
+        return super.onOptionsItemSelected(item)
+    }
 }

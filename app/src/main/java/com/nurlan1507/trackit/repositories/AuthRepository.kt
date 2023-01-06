@@ -2,6 +2,7 @@ package com.nurlan1507.trackit.repositories
 
 import android.util.Log
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.tasks.Continuation
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthEmailException
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
@@ -35,7 +36,7 @@ class AuthRepository {
         return  result
     }
 
-    suspend fun emailPasswordSignIn(email: String, password: String):Result?{
+   suspend fun emailPasswordSignIn(email: String, password: String):Result?{
         var result:Result? = null
         try{
             val authResult = mAuth.signInWithEmailAndPassword(email,password).await()

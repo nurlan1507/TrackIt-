@@ -13,6 +13,8 @@ import com.nurlan1507.trackit.R
 import com.nurlan1507.trackit.databinding.FragmentRegisterBinding
 import com.nurlan1507.trackit.helpers.validateEmail
 import com.nurlan1507.trackit.helpers.validateUsername
+import com.nurlan1507.trackit.repositories.Failure
+import com.nurlan1507.trackit.repositories.Success
 import com.nurlan1507.trackit.viewmodels.UserViewModel
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
@@ -40,7 +42,6 @@ class RegisterFragment : Fragment() {
         return _binding.root
     }
 
-    @OptIn(DelicateCoroutinesApi::class)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.registerBtn.setOnClickListener {
@@ -54,12 +55,15 @@ class RegisterFragment : Fragment() {
                 return@setOnClickListener
             }
             if(!validateUsername(binding.inputUsername))return@setOnClickListener
-            GlobalScope.launch(Dispatchers.IO) {
-                viewModel.register( binding.inputEmail.text.toString(),binding.inputUsername.text.toString() ,binding.inputPassword.text.toString(),binding.inputPasswordConfirm.text.toString())
-            }
-            findNavController().navigate(R.id.action_registerFragment_to_homeFragment)
-        }
 
+            viewModel.register( binding.inputEmail.text.toString(),binding.inputUsername.text.toString() ,binding.inputPassword.text.toString()){
+                if(it is Success){
+                    findNavController().navigate(R.id.action_registerFragment_to_homeFragment)
+                }else if(it is Failure){
+                    binding.registerError?.text = it.error
+                }
+            }
+        }
     }
 
 

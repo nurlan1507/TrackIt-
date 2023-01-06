@@ -3,27 +3,18 @@ package com.nurlan1507.trackit.fragments
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
-import android.content.Intent
-import android.opengl.Visibility
 import android.os.Bundle
-import android.text.InputType
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
-import android.widget.LinearLayout
-import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.marginTop
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
-import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.identity.Identity
 import com.google.android.gms.auth.api.identity.SignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -38,6 +29,7 @@ import com.google.firebase.auth.GoogleAuthProvider
 import com.nurlan1507.trackit.R
 import com.nurlan1507.trackit.databinding.FragmentLoginBinding
 import com.nurlan1507.trackit.helpers.validateEmail
+import com.nurlan1507.trackit.repositories.Failure
 import com.nurlan1507.trackit.viewmodels.UserViewModel
 import kotlinx.coroutines.*
 
@@ -49,7 +41,6 @@ class LoginFragment : Fragment() {
     private val auth = FirebaseAuth.getInstance()
 
     private lateinit var onTapClient: SignInClient
-    private lateinit var signInRequest: BeginSignInRequest
 
     private lateinit var gso:GoogleSignInOptions
     private lateinit var gsoClient:GoogleSignInClient
@@ -58,13 +49,8 @@ class LoginFragment : Fragment() {
         super.onCreate(savedInstanceState)
         (activity as AppCompatActivity).supportActionBar?.hide()
         onTapClient =  Identity.getSignInClient(requireContext())
-        signInRequest = BeginSignInRequest.builder()
-            .setGoogleIdTokenRequestOptions(
-                BeginSignInRequest.GoogleIdTokenRequestOptions.builder()
-                    .setSupported(true)
-                    .setServerClientId(getString(R.string.default_web_client_id))
-                    .build())
-            .build()
+
+
 
 
         gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().requestIdToken(getString(R.string.default_web_client_id)).build()
@@ -86,23 +72,20 @@ class LoginFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.loginBtn.setOnClickListener { view->
+        binding.loginBtn.setOnClickListener {
             if(activity?.currentFocus != null){
                 val service = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 service.hideSoftInputFromWindow(view.windowToken,0)
             }
             if(!validateEmail(binding.inputEmail)) return@setOnClickListener
             if(binding.inputPassword.text.toString().isEmpty())return@setOnClickListener
-            GlobalScope.launch {
-                userViewModel.login(binding.inputEmail.text.toString(),binding.inputPassword.text.toString())
+            userViewModel.login(binding.inputEmail.text.toString(),binding.inputPassword.text.toString()){
+                if(it is Failure){
+                    binding.authErrorMessage?.text = it.error
+                }else{
+                    findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
+                }
             }
-            if(auth.currentUser == null){
-                binding.authErrorMessage?.visibility = View.VISIBLE
-                binding.authErrorMessage?.text = userViewModel.userSignInErrorLiveData.value
-                return@setOnClickListener
-            }
-            findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
-
         }
 
         binding.linkToRegister.setOnClickListener {
@@ -116,6 +99,9 @@ class LoginFragment : Fragment() {
         binding.resetPasswordLink.setOnClickListener {
             invokeDialog()
         }
+
+
+
     }
 
 
@@ -151,7 +137,6 @@ class LoginFragment : Fragment() {
 
 
 
-    @OptIn(DelicateCoroutinesApi::class)
     private fun handleSignInResult(completedTask: Task<GoogleSignInAccount>) {
         try {
             val account = completedTask.result
@@ -171,8 +156,12 @@ class LoginFragment : Fragment() {
         }
     }
     private fun googleSignIn(){
-        gsoClient.signOut()
-        val signInIntent:Intent = gsoClient.signInIntent
+
+        if(auth.currentUser!=null){
+            gsoClient.signOut()
+        }
+
+        val signInIntent = gsoClient.signInIntent
         launcher.launch(signInIntent)
     }
 
@@ -183,7 +172,7 @@ class LoginFragment : Fragment() {
                 handleSignInResult(task)
             }
             else{
-                Toast.makeText(requireContext(),"error +"+result.resultCode.toString(),Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(),"error +"+result.data.toString(),Toast.LENGTH_SHORT).show()
             }
     }
 

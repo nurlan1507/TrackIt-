@@ -17,29 +17,39 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         >
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/star_project"
+            app:layout_constraintTop_toTopOf="@id/card_project_image"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
 
         <ImageView
             android:id="@+id/card_project_image"
             android:layout_width="match_parent"
             android:layout_height="130dp"
-            android:src="@drawable/board_lake_background"
+            android:contentDescription="Background"
             android:scaleType="fitXY"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            android:src="@drawable/board_lake_background"
             app:layout_constraintEnd_toEndOf="parent"
-            android:contentDescription="Background" />
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <TextView
             android:id="@+id/project_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="@id/card_project_image"
             tools:text="ASDASDASDASD"
-            android:textSize="17sp"
+            android:textSize="14sp"
+            android:fontFamily="@font/robotomedium"
             android:padding="4dp"
+            android:paddingStart="6dp"
             android:textColor="@color/white"
             android:background="#80000000"
             />
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 

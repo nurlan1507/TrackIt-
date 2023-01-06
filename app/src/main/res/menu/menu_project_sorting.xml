@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:title="Ascending"
+        android:icon="@drawable/ic_ascending_order"
+        />
+    <item
+        android:title="Descending"
+        android:icon="@drawable/ic_descending_order"/>
+</menu>

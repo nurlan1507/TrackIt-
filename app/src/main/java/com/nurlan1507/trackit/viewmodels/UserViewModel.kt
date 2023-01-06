@@ -1,5 +1,6 @@
 package com.nurlan1507.trackit.viewmodels
 import android.util.Log
+import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,32 +10,23 @@ import com.google.firebase.auth.FirebaseAuth
 import com.nurlan1507.trackit.data.User
 import com.nurlan1507.trackit.repositories.AuthRepository
 import com.nurlan1507.trackit.repositories.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import kotlin.properties.Delegates
 
 const val  passwordVal = ("^"+  "(?=.*[0-9])" + "(?=.*[a-zA-Z])" +"(?=\\S+$)" + ".{6,}" +"$")
 
 class UserViewModel:ViewModel() {
     private var repository:AuthRepository = AuthRepository()
     private var _user = MutableLiveData<User?>()
-
-    private var _userSignUpErrorLiveData:MutableLiveData<String> = MutableLiveData<String>()
-    private var _userSignInErrorLiveData:MutableLiveData<String> = MutableLiveData<String>()
     private var _isAuth:MutableLiveData<Boolean> = MutableLiveData<Boolean>()
+    private var _test:MutableLiveData<String> = MutableLiveData<String>()
+    val isAuth:Boolean = _isAuth.value == true
 
-    val userSignInErrorLiveData: LiveData<String> = _userSignInErrorLiveData
-    val userSignUpErrorLiveData: LiveData<String> = _userSignUpErrorLiveData
-    val isAuth:LiveData<Boolean> = _isAuth
-
-    private fun setLoginError(err:String){
-        _userSignInErrorLiveData.value = err
-    }
-    private fun setRegisterError(err:String){
-        _userSignUpErrorLiveData.value = err
-    }
 
     val user:LiveData<User?> =_user
-    private fun setUser(newUser:User){
+    private fun setUser(newUser:User?){
         _user.value=newUser
     }
 
@@ -43,46 +35,29 @@ class UserViewModel:ViewModel() {
             val res = repository.getCurrentUser()
             if(res is Success){
                 setUser(res.user)
-                _isAuth.value = true
             }else if(res is Failure){
-                _isAuth.value = false
-            }
-           Log.d("KOTAK", FirebaseAuth.getInstance().currentUser?.email.toString())
-        }
-    }
-
-
-    suspend fun login(email:String, password: String){
-        viewModelScope.launch(){
-            val result = repository.emailPasswordSignIn(email,password)
-            if(result == null){
-                Log.d("LOX", "ебать ты лох братуха")
-                return@launch
-            }
-            if(result is Success){
-                setUser(result.user)
-                _isAuth.value = true
-                Log.d("VIEMODELAUTH","${_user.value?.username.toString()} $_user.value?.email.toString() ok")
-            }else if(result is Failure){
-                setLoginError(result.error)
-                _isAuth.value = false
-                Log.d("ERROR_AUTH", _userSignInErrorLiveData.value.toString())
+                setUser(null)
             }
         }
     }
 
-    suspend fun register(email: String, username: String, password: String, repeatPassword:String){
+
+    fun login(email: String, password: String, listener:(Result)->Unit) {
+        viewModelScope.launch {
+            val result = repository.emailPasswordSignIn(email, password)
+            listener(result!!)
+        }
+    }
+
+
+    fun register(email: String, username: String, password: String, listener: (Result) -> Unit){
         viewModelScope.launch {
             val result = repository.emailPasswordSignUp(email,username,password)
-            if(result is Success){
-                setUser(result.user)
-                _isAuth.value = true
-            }else if(result is Failure){
-                setRegisterError(result.error)
-                _isAuth.value = false
+            listener(result!!)
+
             }
         }
-    }
+
 
     suspend fun googleOauth(uid:String?, account:GoogleSignInAccount) {
         viewModelScope.launch {
