@@ -26,6 +26,7 @@ import com.google.android.gms.tasks.Task
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
+import com.nurlan1507.trackit.MainActivity
 import com.nurlan1507.trackit.R
 import com.nurlan1507.trackit.databinding.FragmentLoginBinding
 import com.nurlan1507.trackit.helpers.validateEmail
@@ -49,10 +50,6 @@ class LoginFragment : Fragment() {
         super.onCreate(savedInstanceState)
         (activity as AppCompatActivity).supportActionBar?.hide()
         onTapClient =  Identity.getSignInClient(requireContext())
-
-
-
-
         gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().requestIdToken(getString(R.string.default_web_client_id)).build()
         gsoClient =  GoogleSignIn.getClient(activity as AppCompatActivity,gso)
 
@@ -175,5 +172,8 @@ class LoginFragment : Fragment() {
                 Toast.makeText(requireContext(),"error +"+result.data.toString(),Toast.LENGTH_SHORT).show()
             }
     }
-
+    override fun onDestroy() {
+        (activity as MainActivity).enableDrawer()
+        super.onDestroy()
+    }
 }

@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.nurlan1507.trackit.MainActivity
 import com.nurlan1507.trackit.R
 import com.nurlan1507.trackit.databinding.FragmentRegisterBinding
 import com.nurlan1507.trackit.helpers.validateEmail
@@ -28,7 +29,6 @@ class RegisterFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
     }
 
     override fun onCreateView(
@@ -64,6 +64,10 @@ class RegisterFragment : Fragment() {
                 }
             }
         }
+    }
+    override fun onDestroy() {
+        (activity as MainActivity).enableDrawer()
+        super.onDestroy()
     }
 
 

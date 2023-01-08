@@ -5,12 +5,15 @@ import android.os.Bundle
 import android.view.*
 import android.widget.PopupMenu
 import android.widget.Toast
+import android.widget.Toolbar
 import androidx.appcompat.app.AppCompatActivity
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
+import com.nurlan1507.trackit.MainActivity
 import com.nurlan1507.trackit.R
 import com.nurlan1507.trackit.adapter.GridItemDecoration
 import com.nurlan1507.trackit.adapter.ProjectAdapter
@@ -30,7 +33,7 @@ class HomeFragment : Fragment() {
         if(mAuth.currentUser==null){
             findNavController().navigate(R.id.action_homeFragment_to_loginFragment)
         }
-        (activity as AppCompatActivity).supportActionBar?.show()
+
     }
 
 
@@ -51,6 +54,9 @@ class HomeFragment : Fragment() {
             viewModel = userViewModel
             lifecycleOwner = viewLifecycleOwner
         }
+
+
+
 
         val recyclerView:RecyclerView = binding.projectsList
         recyclerView.addItemDecoration(GridItemDecoration())
@@ -95,4 +101,6 @@ class HomeFragment : Fragment() {
         }
         return super.onOptionsItemSelected(item)
     }
+
+
 }

@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_homeFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_createProject"
+            app:destination="@id/createProject" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
@@ -35,4 +38,9 @@
             android:id="@+id/action_registerFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/createProject"
+        android:name="com.nurlan1507.trackit.fragments.CreateProject"
+        android:label="fragment_create_project"
+        tools:layout="@layout/fragment_create_project" />
 </navigation>

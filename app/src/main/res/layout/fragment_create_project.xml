@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    >
+    <data>
+        <variable
+            name="viewModel"
+            type="com.nurlan1507.trackit.viewmodels.ProjectViewModel"
+            />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="16dp"
+        tools:context=".fragments.CreateProject"
+        >
+        <!--    <ImageView-->
+        <!--        android:id="@+id/popup_create_project_image"-->
+        <!--        android:layout_width="100dp"-->
+        <!--        android:layout_height="100dp"-->
+        <!--        android:src="@drawable/project_image"-->
+        <!--        app:layout_constraintStart_toStartOf="parent"-->
+        <!--        app:layout_constraintEnd_toEndOf="parent"-->
+        <!--        app:layout_constraintTop_toTopOf="parent"-->
+        <!--        />-->
+        <!--    <TextView-->
+        <!--        android:id="@+id/create_project_layout_header"-->
+        <!--        android:layout_width="wrap_content"-->
+        <!--        android:layout_height="wrap_content"-->
+        <!--        style="@style/text_xl_normal"-->
+        <!--        android:text="Create a Project"-->
+        <!--        tools:text="Create a project"-->
+        <!--        app:layout_constraintTop_toBottomOf="@id/popup_create_project_image"-->
+        <!--        app:layout_constraintStart_toStartOf="parent"-->
+        <!--        app:layout_constraintEnd_toEndOf="parent"-->
+        <!--        />-->
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/project_name_text_input_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Project Name"
+            android:layout_marginTop="25dp"
+
+            style="@style/Widget.Design.TextInputLayout"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            >
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/input_project_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:gravity="top"
+                android:drawableStart="@drawable/ic_baseline_drive_file_rename_outline_24"
+                android:drawablePadding="10dp"
+                />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/description_text_input_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Description (Optional)"
+            android:layout_marginTop="15dp"
+            style="@style/Widget.Design.TextInputLayout"
+            app:boxCornerRadiusBottomEnd="25dp"
+            app:boxCornerRadiusBottomStart="25dp"
+            app:boxCornerRadiusTopEnd="25dp"
+            app:boxCornerRadiusTopStart="25dp"
+            app:layout_constraintTop_toBottomOf="@id/project_name_text_input_layout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            >
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/description_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textMultiLine"
+                android:drawableStart="@drawable/ic_baseline_drive_file_rename_outline_24"
+                />
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <LinearLayout
+            android:id="@+id/date_linear_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:divider="@drawable/linear_layout_dividor_create_project"
+            android:showDividers="middle"
+            android:layout_marginTop="15dp"
+            app:layout_constraintTop_toBottomOf="@id/description_text_input_layout"
+            app:layout_constraintStart_toStartOf="parent"
+            >
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_baseline_date_range_24"
+                android:contentDescription="Date icon"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="2dp"
+                />
+            <Button
+                android:id="@+id/start_date_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                style="?attr/materialButtonOutlinedStyle"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:text="@{viewModel.startDate()}"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="-"
+                />
+            <Button
+                android:id="@+id/end_date_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                style="?attr/materialButtonOutlinedStyle"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:text="@{viewModel.endDate()}"
+                />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/create_project_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Create Project"
+            style="?attr/materialButtonStyle"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/date_linear_layout"
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+</layout>
+

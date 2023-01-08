@@ -5,6 +5,7 @@ plugins {
 
 }
 
+
 android {
     namespace 'com.nurlan1507.trackit'
     compileSdk 32
@@ -36,6 +37,7 @@ android {
         viewBinding true
         dataBinding true
     }
+
 }
 
 dependencies {
@@ -80,5 +82,6 @@ dependencies {
 
 
     //popup window
-    
+
+
 }

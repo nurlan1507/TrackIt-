@@ -143,4 +143,16 @@
         <item name="android:textSize">18sp</item>
         <item name="android:fontFamily">@font/robotomedium</item>
     </style>
+
+
+    <style name="MySpinnerDatePickerStyle" parent="android:Widget.Material.DatePicker">
+        <item name="android:datePickerStyle">@style/MySpinnerDatePicker</item>
+    </style>
+
+    <style name="MySpinnerDatePicker" parent="android:Widget.Material.DatePicker">
+        <item name="android:datePickerMode">spinner</item>
+    </style>
+
+
+
 </resources>
