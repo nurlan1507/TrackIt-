@@ -15,7 +15,11 @@
             app:destination="@id/loginFragment" />
         <action
             android:id="@+id/action_homeFragment_to_createProject"
-            app:destination="@id/createProject" />
+            app:destination="@id/createProject"
+            app:enterAnim="@anim/from_left"
+            app:exitAnim="@anim/to_right"
+            app:popEnterAnim="@anim/from_right"
+            app:popExitAnim="@anim/to_left" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"

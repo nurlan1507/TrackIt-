@@ -87,8 +87,6 @@ class CreateProject : Fragment() {
             myCalendarEndDate.get(Calendar.MONTH),
             myCalendarEndDate.get(Calendar.DAY_OF_MONTH)
         )
-
-
         startDateBtn = _binding.startDateBtn
         endDateBtn = _binding.endDateBtn
         startDateBtn.setOnClickListener {
