@@ -1,5 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <style name="text_xsm_small" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/robotolight</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+    <style name="text_xsm_normal" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/robotolight</item>
+        <item name="android:textSize">10sp</item>
+    </style>
+    <style name="text_xsm_large" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/robotolight</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+    <style name="text_xsm_xlarge" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/robotolight</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+
 
     <style name="text_sm_small" parent="TextAppearance.AppCompat">
         <item name="android:fontFamily">@font/robotolight</item>
@@ -9,6 +27,7 @@
         <item name="android:fontFamily">@font/robotolight</item>
         <item name="android:textSize">14sp</item>
     </style>
+
     <style name="text_sm_large" parent="TextAppearance.AppCompat">
         <item name="android:fontFamily">@font/robotolight</item>
         <item name="android:textSize">18sp</item>
@@ -60,6 +79,9 @@
         <item name="android:fontFamily">@font/robotolightitalic</item>
         <item name="android:textSize">30sp</item>
     </style>
+
+
+
 
 
 

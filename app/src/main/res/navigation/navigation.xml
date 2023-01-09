@@ -20,6 +20,13 @@
             app:exitAnim="@anim/to_right"
             app:popEnterAnim="@anim/from_right"
             app:popExitAnim="@anim/to_left" />
+        <action
+            android:id="@+id/action_homeFragment_to_userSearch"
+            app:destination="@id/userSearch"
+            app:enterAnim="@anim/from_left"
+            app:exitAnim="@anim/to_right"
+            app:popEnterAnim="@anim/from_right"
+            app:popExitAnim="@anim/to_left" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
@@ -47,4 +54,9 @@
         android:name="com.nurlan1507.trackit.fragments.CreateProject"
         android:label="fragment_create_project"
         tools:layout="@layout/fragment_create_project" />
+    <fragment
+        android:id="@+id/userSearch"
+        android:name="com.nurlan1507.trackit.fragments.UserSearch"
+        android:label="fragment_user_search"
+        tools:layout="@layout/fragment_user_search" />
 </navigation>

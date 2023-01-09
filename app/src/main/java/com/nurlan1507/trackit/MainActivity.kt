@@ -76,6 +76,10 @@ class MainActivity: AppCompatActivity(), DrawerController {
                     navController.navigate(R.id.action_homeFragment_to_loginFragment)
                     true
                 }
+                R.id.nav_friends ->{
+                    navController.navigate(R.id.action_homeFragment_to_userSearch)
+                    true
+                }
                 else ->true
             }
         }

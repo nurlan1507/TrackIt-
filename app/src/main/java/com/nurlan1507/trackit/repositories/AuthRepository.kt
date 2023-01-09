@@ -14,13 +14,13 @@ import com.google.firebase.firestore.ktx.toObject
 import com.nurlan1507.trackit.data.User
 import kotlinx.coroutines.tasks.await
 
-class AuthRepository {
+class AuthRepository:IAuthRepository {
     private val mAuth = FirebaseAuth.getInstance()
     private val db = FirebaseFirestore.getInstance().collection("users")
 
 
 
-    suspend fun emailPasswordSignUp(email:String,username:String, password:String):Result? {
+   override suspend fun emailPasswordSignUp(email:String,username:String, password:String):Result? {
         var result:Result? = null
         try{
             val authRes = mAuth.createUserWithEmailAndPassword(email,password).await()
@@ -36,7 +36,7 @@ class AuthRepository {
         return  result
     }
 
-   suspend fun emailPasswordSignIn(email: String, password: String):Result?{
+   override suspend fun emailPasswordSignIn(email: String, password: String):Result?{
         var result:Result? = null
         try{
             val authResult = mAuth.signInWithEmailAndPassword(email,password).await()
@@ -67,7 +67,7 @@ class AuthRepository {
         }
     }
 
-    suspend fun getCurrentUser():Result?{
+    override suspend fun getCurrentUser():Result?{
         val id = mAuth.currentUser?.uid
         var res:Result? = null
         if(id!=null){
@@ -84,7 +84,7 @@ class AuthRepository {
         return res
     }
 
-    private suspend fun getUser(uid:String): Result?{
+     override suspend fun getUser(uid:String): Result?{
         var result:Result? = null
             try{
                 val authRes =  db.document(uid).get().await()
@@ -97,25 +97,12 @@ class AuthRepository {
         return result
     }
 
-
-    private fun createUser(uid:String, newUser:Map<String,Any>):Result {
-        var result:Result? = null
-        db.document(uid).set(newUser)
-            .addOnSuccessListener {
-                result = Success(User(newUser["email"].toString(),newUser["username"].toString()))
-            }
-            .addOnFailureListener {
-                result = Failure("Could not create user, please try again")
-            }
-        return result!!
-    }
-
-    fun logout(){
+    override fun logout(){
         mAuth.signOut()
     }
 
 
-    suspend fun googleAuth(uid:String, account:GoogleSignInAccount):Result?{
+    override suspend fun googleAuth(uid:String, account:GoogleSignInAccount):Result?{
         //check if user with that id exists
         var user:User
         var result:Result? = null
