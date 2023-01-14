@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/user"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="16dp"
+    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <ImageView
         android:id="@+id/user_avatar"
@@ -40,14 +41,20 @@
             style="@style/text_xsm_normal"
             />
     </LinearLayout>
-    <Button
+
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/add_to_friend_btn"
-        android:layout_width="70dp"
-        android:layout_height="40dp"
-        android:text="Add"
-        android:textSize="10sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:minWidth="0dp"
+        android:minHeight="0dp"
+        android:padding="0dp"
+        app:iconPadding="0dp"
+        app:icon="@drawable/ic_baseline_more_vert_24"
+        app:iconTint="#959595"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        android:background="#00000000"
         />
 </androidx.constraintlayout.widget.ConstraintLayout>

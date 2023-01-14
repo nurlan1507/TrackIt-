@@ -30,10 +30,14 @@ class HomeFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mAuth = FirebaseAuth.getInstance()
-        if(mAuth.currentUser==null){
+        if(mAuth.currentUser==null) {
             findNavController().navigate(R.id.action_homeFragment_to_loginFragment)
+            (activity as AppCompatActivity).supportActionBar?.hide()
+            (activity as MainActivity).disableDrawer()
         }
+        (activity as AppCompatActivity).supportActionBar?.show()
 
+        Toast.makeText(requireContext(), userViewModel.user.value?.email.toString(),Toast.LENGTH_SHORT).show()
     }
 
 
@@ -50,6 +54,10 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        (activity as MainActivity).enableDrawer()
+
+
+
         binding.apply {
             viewModel = userViewModel
             lifecycleOwner = viewLifecycleOwner
@@ -81,6 +89,8 @@ class HomeFragment : Fragment() {
             }
             popupMenu.show()
         }
+
+
     }
 
 
@@ -102,5 +112,9 @@ class HomeFragment : Fragment() {
         return super.onOptionsItemSelected(item)
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        (activity as MainActivity).disableDrawer()
+    }
 
 }

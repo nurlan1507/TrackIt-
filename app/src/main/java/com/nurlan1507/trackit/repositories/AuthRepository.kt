@@ -13,6 +13,16 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.toObject
 import com.nurlan1507.trackit.data.User
 import kotlinx.coroutines.tasks.await
+abstract class AuthResult {
+}
+
+class Success(val user:User):AuthResult(){
+
+}
+
+class Failure(val error:String):AuthResult(){
+
+}
 
 class AuthRepository:IAuthRepository {
     private val mAuth = FirebaseAuth.getInstance()
@@ -20,12 +30,12 @@ class AuthRepository:IAuthRepository {
 
 
 
-   override suspend fun emailPasswordSignUp(email:String,username:String, password:String):Result? {
-        var result:Result? = null
+   override suspend fun emailPasswordSignUp(email:String,username:String, password:String):AuthResult? {
+        var result:AuthResult? = null
         try{
             val authRes = mAuth.createUserWithEmailAndPassword(email,password).await()
             if(authRes.user!= null){
-                val newUser = User(email,username)
+                val newUser = User(authRes.user!!.uid.toString(),email,username)
                 authRes.user!!.sendEmailVerification()
                 db.document(authRes.user!!.uid).set(newUser).await()
                 result = Success(newUser)
@@ -36,8 +46,8 @@ class AuthRepository:IAuthRepository {
         return  result
     }
 
-   override suspend fun emailPasswordSignIn(email: String, password: String):Result?{
-        var result:Result? = null
+   override suspend fun emailPasswordSignIn(email: String, password: String):AuthResult?{
+        var result:AuthResult? = null
         try{
             val authResult = mAuth.signInWithEmailAndPassword(email,password).await()
             if(authResult.user !=null){
@@ -67,14 +77,14 @@ class AuthRepository:IAuthRepository {
         }
     }
 
-    override suspend fun getCurrentUser():Result?{
+    override suspend fun getCurrentUser():AuthResult?{
         val id = mAuth.currentUser?.uid
-        var res:Result? = null
+        var res:AuthResult? = null
         if(id!=null){
             try{
-                val authRes =  db.document(id).get().await()
+                val authRes = db.document(id).get().await()
                 if(authRes!=null){
-                    res = Success(authRes.toObject<User>()!!)
+                    res = Success(authRes.toObject<User>()!!.withId(authRes.id))
                 }
             }catch (e:Exception){
                 res = Failure(onError(e))
@@ -84,8 +94,8 @@ class AuthRepository:IAuthRepository {
         return res
     }
 
-     override suspend fun getUser(uid:String): Result?{
-        var result:Result? = null
+     override suspend fun getUser(uid:String): AuthResult?{
+        var result:AuthResult? = null
             try{
                 val authRes =  db.document(uid).get().await()
                 if(authRes!=null){
@@ -102,13 +112,13 @@ class AuthRepository:IAuthRepository {
     }
 
 
-    override suspend fun googleAuth(uid:String, account:GoogleSignInAccount):Result?{
+    override suspend fun googleAuth(uid:String, account:GoogleSignInAccount):AuthResult?{
         //check if user with that id exists
         var user:User
-        var result:Result? = null
+        var result:AuthResult? = null
         try{
             val userDB = db.document(uid).get().await()
-            user = User(account.email!!, account.displayName!!, account.photoUrl.toString())
+            user = User(uid ,account.email!!, account.displayName!!, account.photoUrl.toString())
             if(!userDB.exists()){
                 db.document(uid).set(user).await()
             }

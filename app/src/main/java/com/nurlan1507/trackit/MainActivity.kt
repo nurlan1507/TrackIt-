@@ -1,12 +1,17 @@
 package com.nurlan1507.trackit
 
+import android.app.Application
+import android.os.Build
 import android.os.Bundle
+import android.text.format.Time
+import android.util.Log
 import android.view.*
 import android.widget.LinearLayout
 import android.widget.PopupMenu
 import android.widget.PopupWindow
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
@@ -16,12 +21,20 @@ import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.*
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
+import androidx.work.workDataOf
 import com.google.android.material.navigation.NavigationView
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.nurlan1507.trackit.components.DrawerController
+import com.nurlan1507.trackit.data.notifications.Notification
 import com.nurlan1507.trackit.databinding.ActivityMainBinding
 import com.nurlan1507.trackit.databinding.DrawerHeaderBinding
+import com.nurlan1507.trackit.utils.NotificationHelper
+import com.nurlan1507.trackit.utils.NotificationWorker
 import com.nurlan1507.trackit.viewmodels.UserViewModel
-
+import java.util.concurrent.TimeUnit
 
 
 class MainActivity: AppCompatActivity(), DrawerController {
@@ -39,6 +52,7 @@ class MainActivity: AppCompatActivity(), DrawerController {
 
     private lateinit var navigationView: NavigationView
 
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _binding = ActivityMainBinding.inflate(LayoutInflater.from(this))
@@ -83,6 +97,18 @@ class MainActivity: AppCompatActivity(), DrawerController {
                 else ->true
             }
         }
+
+
+        FirebaseFirestore.getInstance().collection("users").document("zvNJbKnGMMNKE10AR7g9V5KiNZO2")
+            .collection("notication").addSnapshotListener {snapshot ,_  ->
+                Toast.makeText(this,"CHANGE!",Toast.LENGTH_SHORT).show()
+                val myWorkRequest = OneTimeWorkRequestBuilder<NotificationWorker>()
+                    .setInitialDelay(0, TimeUnit.SECONDS)
+                    .setInputData(workDataOf("title" to "you have new request", "message" to snapshot!!.documentChanges.get(0).document.toObject(Notification::class.java).text ))
+                    .build()
+                WorkManager.getInstance(this).enqueue(myWorkRequest)
+
+            }
 
     }
 
@@ -167,3 +193,4 @@ class MainActivity: AppCompatActivity(), DrawerController {
 
 
 }
+

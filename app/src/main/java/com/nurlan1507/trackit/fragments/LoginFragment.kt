@@ -90,6 +90,7 @@ class LoginFragment : Fragment() {
         }
 
         binding.loginGoogleBtn.setOnClickListener {
+            gsoClient.signOut()
             googleSignIn()
         }
 
@@ -174,6 +175,7 @@ class LoginFragment : Fragment() {
     }
     override fun onDestroy() {
         (activity as MainActivity).enableDrawer()
+        (activity as AppCompatActivity).supportActionBar?.show()
         super.onDestroy()
     }
 }
