@@ -1,17 +1,10 @@
 package com.nurlan1507.trackit
 
-import android.app.Application
-import android.os.Build
 import android.os.Bundle
-import android.text.format.Time
-import android.util.Log
 import android.view.*
-import android.widget.LinearLayout
 import android.widget.PopupMenu
-import android.widget.PopupWindow
 import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
@@ -21,23 +14,22 @@ import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.*
-import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.WorkManager
-import androidx.work.workDataOf
+
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
+
 import com.nurlan1507.trackit.components.DrawerController
-import com.nurlan1507.trackit.data.notifications.Notification
+
 import com.nurlan1507.trackit.databinding.ActivityMainBinding
 import com.nurlan1507.trackit.databinding.DrawerHeaderBinding
-import com.nurlan1507.trackit.utils.NotificationHelper
-import com.nurlan1507.trackit.utils.NotificationWorker
+
 import com.nurlan1507.trackit.viewmodels.UserViewModel
 import java.util.concurrent.TimeUnit
 
-
+val MAuth = FirebaseAuth.getInstance()
 class MainActivity: AppCompatActivity(), DrawerController {
+
+
     private lateinit var _binding:ActivityMainBinding
     val binding get() = _binding
 
@@ -52,7 +44,7 @@ class MainActivity: AppCompatActivity(), DrawerController {
 
     private lateinit var navigationView: NavigationView
 
-    @RequiresApi(Build.VERSION_CODES.N)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _binding = ActivityMainBinding.inflate(LayoutInflater.from(this))
@@ -99,18 +91,31 @@ class MainActivity: AppCompatActivity(), DrawerController {
         }
 
 
-        FirebaseFirestore.getInstance().collection("users").document("zvNJbKnGMMNKE10AR7g9V5KiNZO2")
-            .collection("notication").addSnapshotListener {snapshot ,_  ->
-                Toast.makeText(this,"CHANGE!",Toast.LENGTH_SHORT).show()
-                val myWorkRequest = OneTimeWorkRequestBuilder<NotificationWorker>()
-                    .setInitialDelay(0, TimeUnit.SECONDS)
-                    .setInputData(workDataOf("title" to "you have new request", "message" to snapshot!!.documentChanges.get(0).document.toObject(Notification::class.java).text ))
-                    .build()
-                WorkManager.getInstance(this).enqueue(myWorkRequest)
+//        FirebaseFirestore.getInstance().collection("users").document("zvNJbKnGMMNKE10AR7g9V5KiNZO2")
+//            .collection("notication").addSnapshotListener {snapshot ,_  ->
+//                Toast.makeText(this,"CHANGE!",Toast.LENGTH_SHORT).show()
+//                val myWorkRequest = OneTimeWorkRequestBuilder<NotificationWorker>()
+//                    .setInitialDelay(0, TimeUnit.SECONDS)
+//                    .setInputData(workDataOf("title" to "you have new request", "message" to snapshot!!.documentChanges.get(0).document.toObject(Notification::class.java).text ))
+//                    .build()
+//                WorkManager.getInstance(this).enqueue(myWorkRequest)
+//
+//            }
 
-            }
-
+//
+//      Firebase.messaging.subscribeToTopic(FirebaseAuth.getInstance().currentUser?.uid.toString())
+//    .addOnCompleteListener { task ->
+//        var msg = "Subscribed"
+//        if (!task.isSuccessful) {
+//            msg = "Subscribe failed"
+//        }
+//        Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
+//    }
     }
+
+
+
+
 
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -119,21 +124,17 @@ class MainActivity: AppCompatActivity(), DrawerController {
                 drawerLayout.openDrawer(GravityCompat.START)
                 return true
             }
+
             R.id.add_project_btn ->{
                 val popupMenu = PopupMenu(this, findViewById(R.id.add_project_btn))
                 popupMenu.menuInflater.inflate(R.menu.menu_add,popupMenu.menu)
                 popupMenu.setOnMenuItemClickListener { item->
                     when(item.itemId){
                         R.id.menu_add_project ->{
-//                            val view = layoutInflater.inflate(R.layout.create_project_popup_window,null)
-//                            val window = PopupWindow(view,LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT,true)
-//                            window.showAtLocation(binding.navHost,Gravity.CENTER,0,0)
                             navController.navigate(R.id.action_homeFragment_to_createProject)
-
                         }
                         R.id.menu_add_task -> {
                             Toast.makeText(this,supportFragmentManager.backStackEntryCount,Toast.LENGTH_SHORT).show()
-
                         }
                         else ->{
 
@@ -147,10 +148,6 @@ class MainActivity: AppCompatActivity(), DrawerController {
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu_toolbar,menu)
-        return super.onCreateOptionsMenu(menu)
-    }
 
     override fun onBackPressed() {
         var drawer:DrawerLayout = findViewById(R.id.drawer_layout)
@@ -190,7 +187,5 @@ class MainActivity: AppCompatActivity(), DrawerController {
         drawerLayout.addDrawerListener(mDrawerToggle)
         mDrawerToggle.syncState()
     }
-
-
 }
 

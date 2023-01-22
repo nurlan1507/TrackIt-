@@ -81,8 +81,23 @@
     </style>
 
 
+    <style name="text_lg_small" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/robotomedium</item>
+        <item name="android:textSize">15sp</item>
 
-
+    </style>
+    <style name="text_lg_normal" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/robotomedium</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+    <style name="text_lg_large" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/robotomedium</item>
+        <item name="android:textSize">24sp</item>
+    </style>
+    <style name="text_lg_xlarge" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/robotomedium</item>
+        <item name="android:textSize">30sp</item>
+    </style>
 
 
 

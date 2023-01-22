@@ -31,6 +31,7 @@ import com.nurlan1507.trackit.R
 import com.nurlan1507.trackit.databinding.FragmentLoginBinding
 import com.nurlan1507.trackit.helpers.validateEmail
 import com.nurlan1507.trackit.repositories.Failure
+import com.nurlan1507.trackit.repositories.Success
 import com.nurlan1507.trackit.viewmodels.UserViewModel
 import kotlinx.coroutines.*
 
@@ -79,8 +80,9 @@ class LoginFragment : Fragment() {
             userViewModel.login(binding.inputEmail.text.toString(),binding.inputPassword.text.toString()){
                 if(it is Failure){
                     binding.authErrorMessage?.text = it.error
-                }else{
+                }else if(it is Success){
                     findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
+                    userViewModel.setUser(it.user)
                 }
             }
         }

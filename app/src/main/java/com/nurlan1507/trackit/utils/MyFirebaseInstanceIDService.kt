@@ -17,7 +17,8 @@ class MyFirebaseInstanceIDService:FirebaseMessagingService() {
 
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)
-        Log.d(TAG, message.notification?.body.toString())
+        Log.d(TAG,message.notification!!.body.toString())
+        NotificationHelper(this).createNotification(message.notification!!.title.toString(), message.notification!!.body.toString())
     }
 
 }

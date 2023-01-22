@@ -23,17 +23,20 @@ class ProjectViewModel:ViewModel() {
     private var _startDate:MutableLiveData<Long?> = MutableLiveData<Long?>(null)
     private var _endDate:MutableLiveData<Long?> = MutableLiveData<Long?>(null)
 
+    var formatterInstance = SimpleDateFormat("MMM, dd yyyy", Locale.getDefault())
+    init{
+        formatterInstance.timeZone = TimeZone.getTimeZone("UTC")
+    }
 
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    val formatter = DateTimeFormatter.ofPattern("MMM, dd yyyy")
-
-    @RequiresApi(Build.VERSION_CODES.O)
     fun startDate():String{
         return if(_startDate.value != null) {
-            Instant.ofEpochSecond(_startDate.value!!).atZone(ZoneId.systemDefault()).format(formatter)
-        } else Instant.ofEpochSecond(LocalDateTime.now().toEpochSecond(ZoneOffset.UTC)).atZone(ZoneId.systemDefault()).format(formatter)
+            var date = Date(_startDate.value!! * 1000)
+            formatterInstance.format(date)
+        } else formatterInstance.format(Date(System.currentTimeMillis()))
     }
+
+
     fun setStartDate(timeStamp:Long){
         _startDate.value = timeStamp
     }
@@ -43,10 +46,9 @@ class ProjectViewModel:ViewModel() {
 
 
 
-    @RequiresApi(Build.VERSION_CODES.O)
     fun endDate():String{
         return if(_endDate.value !=null) {
-            Instant.ofEpochSecond(_endDate.value!!).atZone(ZoneId.systemDefault()).format(formatter)
+            formatterInstance.format(Date(_endDate.value!! * 1000))
         } else "No date"
     }
 

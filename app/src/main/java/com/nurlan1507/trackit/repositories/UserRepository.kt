@@ -1,41 +1,28 @@
 package com.nurlan1507.trackit.repositories
 
-import android.app.Activity
-import android.app.Application
-import android.content.Context
-import android.content.pm.ApplicationInfo
 import android.util.Log
-import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.MetadataChanges
-import com.nurlan1507.trackit.MainActivity
 import com.nurlan1507.trackit.data.User
-import com.nurlan1507.trackit.data.notifications.FriendRequestNotification
+import com.nurlan1507.trackit.data.notifications.Notification
 import com.nurlan1507.trackit.helpers.ApiFailure
 import com.nurlan1507.trackit.helpers.ApiResult
 import com.nurlan1507.trackit.helpers.ApiSuccess
-import com.nurlan1507.trackit.utils.NotificationWorker
-import kotlinx.coroutines.Dispatchers
+import com.nurlan1507.trackit.utils.NotificationSender
 import kotlinx.coroutines.tasks.await
 
 
 class UserRepository() :IUserRepository {
     private val db = FirebaseFirestore.getInstance()
     private val userCollection = db.collection("users")
-//
-//    init{
-//        userCollection.document(FirebaseAuth.getInstance().currentUser?.uid.toString())
-//            .collection("notication")
-//            .addSnapshotListener(MetadataChanges.INCLUDE){snapshot, e ->
-//                if(e != null){
-//                    Log.w("FirebaseError", e.message.toString())
-//                }
-//            //Запустить уведомление, но класс требует контекста
-//            }
-//
-//
-//    }
+
+    init{
+        Log.d("PushNotification",FirebaseAuth.getInstance().currentUser?.uid.toString())
+
+
+
+
+    }
 
     override suspend fun findUsers(email:String): List<User> {
         val result = userCollection.orderBy("email").limit(10).startAt(email).endAt("${email}\uf8ff").get().await()
@@ -51,15 +38,15 @@ class UserRepository() :IUserRepository {
             db.collection("users").document(sender.uid)
                 .collection("friends").document(receiver.uid)
                 .set(mapOf("friend" to false)).await()
-            val notification = FriendRequestNotification(receiver.uid,"${sender.username} (${sender.email}) wants to be friends with you", sender.uid)
-            NotificationRepo.notificationRepository.sendNotification(receiver.uid,notification)
 
+            val notification = Notification(receiver.uid,"${sender.username} (${sender.email}) wants to be friends with you", sender)
+            NotificationRepo.notificationRepository.sendNotification(receiver.uid,notification)
 
             db.collection("users").document(receiver.uid)
                 .collection("friends").document(sender.uid)
-                .set(mapOf("friend" to false)).await()
+                .set(mapOf("friend" to false, "user" to receiver)).await()
 
-
+            NotificationSender.notificationSender.sendMessage(receiver.deviceToken,notification.text)
             ApiSuccess()
         }catch (e:Exception){
             ApiFailure(e)
@@ -68,6 +55,33 @@ class UserRepository() :IUserRepository {
 
     override suspend fun respondToFriendRequest(responderId: String) {
 
+    }
+
+    override suspend fun getFriends(userId:String):ApiResult{
+        return try{
+            val result = userCollection.document(userId).collection("friends").whereEqualTo("friend" , true).get().await()
+            ApiSuccess(result.toObjects(User::class.java))
+        }catch (e:Exception){
+            ApiFailure(e)
+        }
+    }
+
+    override suspend fun getPendingFriends(userId: String): ApiResult {
+        return try{
+            val result = userCollection.document(userId).collection("friends").whereEqualTo("friend", false).get().await()
+            ApiSuccess(result.toObjects(User::class.java))
+        }catch (e:Exception){
+            ApiFailure(e)
+        }
+    }
+
+    override suspend fun getUser(userId: String): ApiResult {
+        return try{
+            val res = userCollection.document(userId).get().await()
+            ApiSuccess(res.toObject(User::class.java))
+        }catch (e:Exception){
+            ApiFailure(e)
+        }
     }
 }
 

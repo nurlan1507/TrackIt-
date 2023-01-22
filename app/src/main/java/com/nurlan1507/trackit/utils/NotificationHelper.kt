@@ -6,6 +6,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -40,9 +41,10 @@ class NotificationHelper(val context: Context) {
 //        NotificationManagerCompat.from(context).notify(notificationId,notification)
 //    }
 
-    @RequiresApi(Build.VERSION_CODES.N)
     fun createNotification(title:String, message:String){
         createNotificationChannel()
+        Log.d("PushNotification","PushNotification")
+
         val intent = Intent(context,MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }

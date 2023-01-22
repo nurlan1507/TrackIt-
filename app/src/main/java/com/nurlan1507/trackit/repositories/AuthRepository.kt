@@ -11,6 +11,7 @@ import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.toObject
+import com.google.firebase.messaging.FirebaseMessaging
 import com.nurlan1507.trackit.data.User
 import kotlinx.coroutines.tasks.await
 abstract class AuthResult {
@@ -27,6 +28,8 @@ class Failure(val error:String):AuthResult(){
 class AuthRepository:IAuthRepository {
     private val mAuth = FirebaseAuth.getInstance()
     private val db = FirebaseFirestore.getInstance().collection("users")
+    private val fbm = FirebaseMessaging.getInstance()
+    private val deviceToken = FirebaseMessaging.getInstance().token.toString()
 
 
 
@@ -35,7 +38,7 @@ class AuthRepository:IAuthRepository {
         try{
             val authRes = mAuth.createUserWithEmailAndPassword(email,password).await()
             if(authRes.user!= null){
-                val newUser = User(authRes.user!!.uid.toString(),email,username)
+                val newUser = User(authRes.user!!.uid.toString(),email,username,deviceToken,listOf())
                 authRes.user!!.sendEmailVerification()
                 db.document(authRes.user!!.uid).set(newUser).await()
                 result = Success(newUser)
@@ -118,7 +121,8 @@ class AuthRepository:IAuthRepository {
         var result:AuthResult? = null
         try{
             val userDB = db.document(uid).get().await()
-            user = User(uid ,account.email!!, account.displayName!!, account.photoUrl.toString())
+            val userInstance = userDB.toObject(User::class.java)
+            user = User(uid ,account.email!!, account.displayName!!,deviceToken  ,userInstance?.friends , account.photoUrl.toString() )
             if(!userDB.exists()){
                 db.document(uid).set(user).await()
             }

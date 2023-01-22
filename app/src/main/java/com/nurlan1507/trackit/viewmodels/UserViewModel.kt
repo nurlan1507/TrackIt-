@@ -7,9 +7,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.firebase.auth.FirebaseAuth
 import com.nurlan1507.trackit.MainActivity
 import com.nurlan1507.trackit.data.User
 import com.nurlan1507.trackit.helpers.ApiResult
+import com.nurlan1507.trackit.helpers.ApiSuccess
 import com.nurlan1507.trackit.repositories.AuthRepository
 import com.nurlan1507.trackit.repositories.*
 import com.nurlan1507.trackit.utils.NotificationWorker
@@ -23,13 +25,18 @@ class UserViewModel:ViewModel() {
     private var _user = MutableLiveData<User?>()
     private var _isAuth:MutableLiveData<Boolean> = MutableLiveData<Boolean>()
     private var _userList:MutableLiveData<List<User>> = MutableLiveData<List<User>>(listOf())
+    private var _friends:MutableLiveData<List<User>> = MutableLiveData<List<User>>(listOf())
     //getters
     val user:LiveData<User?> =_user
     val userList get():LiveData<List<User>> = _userList
-    private fun setUser(newUser:User?){
+    val friends:LiveData<List<User>> = _friends
+
+    fun setUser(newUser:User?){
         _user.value=newUser
     }
-
+    fun setFriends(friends:List<User>){
+        _friends.value = friends
+    }
 
 
     fun findUsers(email:String){
@@ -84,6 +91,8 @@ class UserViewModel:ViewModel() {
 
     fun logout(){
         repository.logout()
+        FirebaseAuth.getInstance().signOut()
+        _user.value = null
         _isAuth.value = false
     }
 
@@ -91,5 +100,26 @@ class UserViewModel:ViewModel() {
         viewModelScope.launch {
             userRepository.sendFriendRequest(_user.value!!,receiver)
         }
+    }
+
+    fun getFriends(userId:String){
+        viewModelScope.launch {
+            val friends = userRepository.getFriends(userId)
+            if(friends is ApiSuccess) setFriends(friends.list as List<User>)
+        }
+    }
+
+    fun getUser(userId:String, listener:(user:User)->Unit){
+        viewModelScope.launch {
+            val user = userRepository.getUser(userId)
+            if (user is ApiSuccess) listener(user.list as User)
+        }
+    }
+
+    fun isFriend(userId:String):Boolean{
+        val isFriend = _friends.value!!.any { user ->
+            user.uid == userId
+        }
+        return isFriend
     }
 }

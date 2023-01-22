@@ -5,11 +5,8 @@ import androidx.work.Worker
 import androidx.work.WorkerParameters
 
 class NotificationWorker(val context: Context, val params:WorkerParameters):Worker(context,params) {
-
     override fun doWork(): Result {
-        NotificationHelper(context).createNotification(
-            inputData.getString("title")!!, inputData.getString("message")!!
-        )
+        NotificationSender.notificationSender.sendMessage(inputData.getString("token")!!,inputData.getString("message")!!)
         return Result.success()
     }
 }

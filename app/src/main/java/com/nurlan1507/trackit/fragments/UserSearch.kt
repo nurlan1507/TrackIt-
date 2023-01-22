@@ -22,6 +22,7 @@ import com.nurlan1507.trackit.adapter.OnUserClickListener
 import com.nurlan1507.trackit.adapter.UserAdapter
 import com.nurlan1507.trackit.databinding.FragmentUserSearchBinding
 import com.nurlan1507.trackit.helpers.ApiFailure
+import com.nurlan1507.trackit.helpers.ApiSuccess
 import com.nurlan1507.trackit.viewmodels.UserViewModel
 
 
@@ -59,9 +60,12 @@ class UserSearch : Fragment() {
             popupMenu.setOnMenuItemClickListener {
                 when(it.itemId){
                     R.id.send_friend_request ->{
-                        sharedUserViewModel.sendFriendRequest(user) { it ->
-                            if (it is ApiFailure) {
-                                Toast.makeText(requireContext(),it.e.message.toString() , Toast.LENGTH_SHORT)
+                        Toast.makeText(requireContext(),user.deviceToken.toString(),Toast.LENGTH_LONG).show()
+                        sharedUserViewModel.sendFriendRequest(user) { res ->
+                            if(res is ApiSuccess){
+                            }
+                            if (res is ApiFailure) {
+                                Toast.makeText(requireContext(),res.e.message.toString() , Toast.LENGTH_SHORT)
                                     .show()
                             }
                         }
