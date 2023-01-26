@@ -105,6 +105,7 @@ class HomeFragment : Fragment() {
         notificationRecyclerView.addItemDecoration(itemDecor)
         val notificationAdapter = NotificationsAdapter(requireContext()){notificaiton ->
                 if(notificaiton is Notification){
+                    notificationsViewModel.getNotification(notificaiton.notificationId)
                     findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToUserProfile(userId=notificaiton.sender.uid))
                 }
 

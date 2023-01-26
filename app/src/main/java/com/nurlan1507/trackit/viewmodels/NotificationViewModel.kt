@@ -20,6 +20,8 @@ class NotificationViewModel:ViewModel() {
     val notifications get():LiveData<List<Notification>> = _notifications
     var formatterInstance = SimpleDateFormat("MMM, dd yyyy", Locale.getDefault())
 
+    var _currentNotification:MutableLiveData<Notification> = MutableLiveData<Notification>()
+    val currentNotification:LiveData<Notification> = _currentNotification
     init{
         formatterInstance.timeZone = TimeZone.getTimeZone("UTC")
     }
@@ -36,6 +38,21 @@ class NotificationViewModel:ViewModel() {
             }else if(result is ApiFailure){
                 Log.d("SOSAT", result.e.message.toString())
             }
+        }
+    }
+    fun getNotification(notificationId:String){
+        for(doc in _notifications.value!!){
+            if(doc.notificationId == notificationId){
+                _currentNotification.value = doc
+                return
+            }
+        }
+        return
+    }
+    fun deleteNotification(receiverId:String){
+        viewModelScope.launch {
+            val notificationId = _currentNotification.value?.notificationId.toString()
+            repository.deleteNotification(receiverId,notificationId)
         }
     }
 

@@ -29,7 +29,7 @@ class AuthRepository:IAuthRepository {
     private val mAuth = FirebaseAuth.getInstance()
     private val db = FirebaseFirestore.getInstance().collection("users")
     private val fbm = FirebaseMessaging.getInstance()
-    private val deviceToken = FirebaseMessaging.getInstance().token.toString()
+
 
 
 
@@ -38,7 +38,7 @@ class AuthRepository:IAuthRepository {
         try{
             val authRes = mAuth.createUserWithEmailAndPassword(email,password).await()
             if(authRes.user!= null){
-                val newUser = User(authRes.user!!.uid.toString(),email,username,deviceToken,listOf())
+                val newUser = User(authRes.user!!.uid.toString(),email,username,getDeviceToken(),listOf())
                 authRes.user!!.sendEmailVerification()
                 db.document(authRes.user!!.uid).set(newUser).await()
                 result = Success(newUser)
@@ -122,7 +122,7 @@ class AuthRepository:IAuthRepository {
         try{
             val userDB = db.document(uid).get().await()
             val userInstance = userDB.toObject(User::class.java)
-            user = User(uid ,account.email!!, account.displayName!!,deviceToken  ,userInstance?.friends , account.photoUrl.toString() )
+            user = User(uid ,account.email!!, account.displayName!!,getDeviceToken() ,userInstance?.friends , account.photoUrl.toString() )
             if(!userDB.exists()){
                 db.document(uid).set(user).await()
             }
@@ -131,5 +131,10 @@ class AuthRepository:IAuthRepository {
             result = Failure(e.message!!)
         }
         return result
+    }
+
+
+    private suspend fun getDeviceToken():String{
+        return FirebaseMessaging.getInstance().token.await().toString()
     }
 }

@@ -1,6 +1,7 @@
 package com.nurlan1507.trackit.repositories
 
 import android.util.Log
+import androidx.work.WorkManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.nurlan1507.trackit.data.User
@@ -39,22 +40,32 @@ class UserRepository() :IUserRepository {
                 .collection("friends").document(receiver.uid)
                 .set(mapOf("friend" to false)).await()
 
-            val notification = Notification(receiver.uid,"${sender.username} (${sender.email}) wants to be friends with you", sender)
+//            val notification = Notification(receiver.uid,"${sender.username} (${sender.email}) wants to be friends with you", sender)
+            val notification = mapOf("date" to System.currentTimeMillis(), "notificationId" to sender.uid, "text" to "${sender.username} (${sender.email}) wants to be friends with you" )
             NotificationRepo.notificationRepository.sendNotification(receiver.uid,notification)
 
             db.collection("users").document(receiver.uid)
                 .collection("friends").document(sender.uid)
                 .set(mapOf("friend" to false, "user" to receiver)).await()
 
-            NotificationSender.notificationSender.sendMessage(receiver.deviceToken,notification.text)
+            NotificationSender.notificationSender.sendMessage(receiver.deviceToken,notification.get("text").toString())
             ApiSuccess()
         }catch (e:Exception){
             ApiFailure(e)
         }
     }
 
-    override suspend fun respondToFriendRequest(responderId: String) {
-
+    override suspend fun respondToFriendRequest(responderId: String, notificationId:String ):ApiResult {
+        var result:ApiResult
+        try{
+            userCollection.document(responderId).collection("notification").document(notificationId).get().await()
+            userCollection.document(responderId).collection("friends").document(notificationId).update(mapOf("friend" to true))
+            //workload that adds a friend to sender
+            result = ApiSuccess()
+        }catch (e:Exception){
+            result = ApiFailure(e)
+        }
+        return result
     }
 
     override suspend fun getFriends(userId:String):ApiResult{
@@ -81,6 +92,15 @@ class UserRepository() :IUserRepository {
             ApiSuccess(res.toObject(User::class.java))
         }catch (e:Exception){
             ApiFailure(e)
+        }
+    }
+
+    override suspend fun addFriendToSender(senderId:String,receiverId:String):ApiResult{
+        try{
+            userCollection.document(senderId).collection("friends").document(receiverId).set(mapOf("friend" to true))
+            return ApiSuccess()
+        }catch (e:Exception){
+            return ApiFailure(e)
         }
     }
 }

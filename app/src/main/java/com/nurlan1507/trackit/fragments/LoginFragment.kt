@@ -83,6 +83,7 @@ class LoginFragment : Fragment() {
                 }else if(it is Success){
                     findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
                     userViewModel.setUser(it.user)
+                    userViewModel.setOwner()
                 }
             }
         }
@@ -145,7 +146,7 @@ class LoginFragment : Fragment() {
                 if(it.isSuccessful){
                     GlobalScope.launch{
                         userViewModel.googleOauth(it.result.user?.uid, account)
-                    }
+                        }
                     findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
                 }else{
                     Toast.makeText(requireContext(),it.exception?.message,Toast.LENGTH_SHORT).show()

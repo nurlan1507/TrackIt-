@@ -20,8 +20,9 @@ class ProjectViewModel:ViewModel() {
     private var _project:MutableLiveData<Project> = MutableLiveData<Project>()
     val project:LiveData<Project> get() = _project
 
-    private var _startDate:MutableLiveData<Long?> = MutableLiveData<Long?>(null)
+    private var _startDate:MutableLiveData<Long?> = MutableLiveData<Long?>(System.currentTimeMillis())
     private var _endDate:MutableLiveData<Long?> = MutableLiveData<Long?>(null)
+    val endDate:LiveData<Long?> = _startDate
 
     var formatterInstance = SimpleDateFormat("MMM, dd yyyy", Locale.getDefault())
     init{
@@ -54,13 +55,14 @@ class ProjectViewModel:ViewModel() {
 
 
 
-
-
-    fun createProject(newProject:Project){
+    fun createProject(title:String, description:String){
         //TODO validation
 
+    }
 
-        _project.value = newProject
+    fun validateDates():Boolean{
+
+        return _startDate.value!! <= _endDate.value!!
     }
 
 }

@@ -4,6 +4,7 @@ import android.app.DatePickerDialog
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.GradientDrawable.Orientation
 import android.os.Build
 import android.os.Bundle
 import android.view.*
@@ -14,9 +15,14 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.common.base.MoreObjects.ToStringHelper
 import com.nurlan1507.trackit.MainActivity
 import com.nurlan1507.trackit.R
+import com.nurlan1507.trackit.adapter.BackGroundImagesAdapter
+import com.nurlan1507.trackit.adapter.GridItemDecoration
+import com.nurlan1507.trackit.data.projectBoardBackgrounds
 import com.nurlan1507.trackit.databinding.FragmentCreateProjectBinding
 import com.nurlan1507.trackit.viewmodels.ProjectViewModel
 import java.text.SimpleDateFormat
@@ -52,7 +58,13 @@ class CreateProject : Fragment() {
         _binding.apply {
             viewModel = sharedProjectViewModel
         }
+        var recyclerView = _binding.imageList
+        val backGroundImagesAdapter = BackGroundImagesAdapter(projectBoardBackgrounds){
 
+        }
+        recyclerView.layoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL,false)
+        recyclerView.addItemDecoration(GridItemDecoration())
+        recyclerView.adapter = backGroundImagesAdapter
         return _binding.root
     }
 
@@ -94,6 +106,30 @@ class CreateProject : Fragment() {
         }
         endDateBtn.setOnClickListener {
             endDateDialog.show()
+        }
+        _binding.createProjectBtn.setOnClickListener {
+            //validation
+            if(_binding.inputProjectName.text?.isEmpty() == true){
+                _binding.inputProjectName.error = "Field should not be empty"
+                _binding.inputProjectName.requestFocus()
+                return@setOnClickListener
+            }
+            if(_binding.descriptionInput.text?.isEmpty() == true){
+                _binding.descriptionInput.error = "Field should not be empty"
+                _binding.descriptionInput.requestFocus()
+                return@setOnClickListener
+            }
+            if(sharedProjectViewModel.endDate() =="No date"){
+                _binding.endDateBtn.requestFocus()
+                _binding.dateError.text = "Pls set date"
+                return@setOnClickListener
+            }
+            if(!sharedProjectViewModel.validateDates()){
+                _binding.endDateBtn.requestFocus()
+                _binding.dateError.text = "Deadline cannot be earlier than a start date"
+                return@setOnClickListener
+            }
+
         }
         super.onViewCreated(view, savedInstanceState)
     }

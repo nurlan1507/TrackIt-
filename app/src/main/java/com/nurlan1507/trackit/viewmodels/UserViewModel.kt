@@ -6,8 +6,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.work.WorkManager
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.messaging.FirebaseMessaging
 import com.nurlan1507.trackit.MainActivity
 import com.nurlan1507.trackit.data.User
 import com.nurlan1507.trackit.helpers.ApiResult
@@ -21,7 +23,7 @@ const val  passwordVal = ("^"+  "(?=.*[0-9])" + "(?=.*[a-zA-Z])" +"(?=\\S+$)" + 
 
 class UserViewModel:ViewModel() {
     private var repository:AuthRepository = AuthRepository()
-    private var userRepository:UserRepository = UserRepository()
+    private var userRepository = UserRepo.userRepository
     private var _user = MutableLiveData<User?>()
     private var _isAuth:MutableLiveData<Boolean> = MutableLiveData<Boolean>()
     private var _userList:MutableLiveData<List<User>> = MutableLiveData<List<User>>(listOf())
@@ -46,6 +48,17 @@ class UserViewModel:ViewModel() {
     }
 
     init{
+        viewModelScope.launch {
+            val res = repository.getCurrentUser()
+            if(res is Success){
+                setUser(res.user)
+            }else if(res is Failure){
+                setUser(null)
+            }
+        }
+    }
+
+    fun setOwner(){
         viewModelScope.launch {
             val res = repository.getCurrentUser()
             if(res is Success){
@@ -112,7 +125,10 @@ class UserViewModel:ViewModel() {
     fun getUser(userId:String, listener:(user:User)->Unit){
         viewModelScope.launch {
             val user = userRepository.getUser(userId)
-            if (user is ApiSuccess) listener(user.list as User)
+            if (user is ApiSuccess){
+                Log.d("NUULL?", user.list.toString())
+                listener(user.list as User)
+            }
         }
     }
 
@@ -122,4 +138,17 @@ class UserViewModel:ViewModel() {
         }
         return isFriend
     }
+
+    fun acceptFriend(notificationId:String, callback:()->Unit){
+        viewModelScope.launch {
+            val result = userRepository.respondToFriendRequest(_user.value?.uid.toString(), notificationId)
+            if(result is ApiSuccess){
+                callback()
+            }else {
+                return@launch
+            }
+        }
+    }
+
+
 }

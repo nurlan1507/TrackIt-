@@ -1,6 +1,7 @@
 package com.nurlan1507.trackit.utils
 
 import android.util.Log
+import com.google.firebase.messaging.FirebaseMessaging
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -28,7 +29,6 @@ class NotificationSender {
         json.put("notification", notificationJson)
         json.put("data", dataJson)
         json.put("to", fcmToken)
-
         val reqBody = RequestBody.create("application/json; charset=utf-8".toMediaTypeOrNull(), json.toString())
         val request = Request.Builder()
             .url(FCM_URL)
@@ -36,8 +36,10 @@ class NotificationSender {
             .addHeader("Authorization", "key=$key")
             .post(reqBody)
             .build()
+        Log.d("FMCTOKEN", FirebaseMessaging.getInstance().token.toString())
         val call= okHttpClient.newCall(request)
         call.enqueue(callback())
+        call.execute()
     }
 
     companion object{
@@ -46,10 +48,9 @@ class NotificationSender {
 
     class callback:Callback{
         override fun onFailure(call: Call, e: IOException) {
-            Log.d("lox","suka")
         }
         override fun onResponse(call: Call, response: Response) {
-            Log.d("Krasave",response.code.toString() )
+            Log.d("Worked",response.code.toString())
         }
     }
 }

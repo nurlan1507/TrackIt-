@@ -9,6 +9,9 @@ import java.util.stream.Stream.builder
 
 private const val TAG = "MESSAGING"
 class MyFirebaseInstanceIDService:FirebaseMessagingService() {
+    init{
+    }
+
     override fun onNewToken(token: String) {
         super.onNewToken(token)
         Log.d(TAG,token)

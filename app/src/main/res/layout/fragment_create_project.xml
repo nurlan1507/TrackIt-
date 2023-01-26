@@ -132,7 +132,39 @@
                 android:text="@{viewModel.endDate()}"
                 />
         </LinearLayout>
-
+        <TextView
+            android:id="@+id/date_error"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/date_linear_layout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            style="@style/text_sm_normal"
+            android:textColor="@color/error"
+            />
+        <TextView
+            android:id="@+id/select_background_image"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:text="Pick a backgroud (for Board)"
+            app:layout_constraintTop_toBottomOf="@id/date_error"
+            app:layout_constraintStart_toStartOf="parent"
+            style="@style/text_lg_normal_form"
+            android:textColor="#666666"
+            />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/image_list"
+            android:layout_marginTop="15dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scrollbars="horizontal"
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:spanCount="2"
+            tools:itemCount="4"
+            app:layout_constraintTop_toBottomOf="@id/select_background_image"
+            app:layout_constraintStart_toStartOf="parent"
+            />
         <Button
             android:id="@+id/create_project_btn"
             android:layout_width="match_parent"
@@ -141,7 +173,7 @@
             style="?attr/materialButtonStyle"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/date_linear_layout"
+            app:layout_constraintTop_toBottomOf="@id/image_list"
             />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
