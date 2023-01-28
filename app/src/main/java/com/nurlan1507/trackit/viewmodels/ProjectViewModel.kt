@@ -61,8 +61,11 @@ class ProjectViewModel:ViewModel() {
     }
 
     fun validateDates():Boolean{
-
         return _startDate.value!! <= _endDate.value!!
+    }
+
+    fun setBackground(imgId:Int){
+        _project.value?.image = imgId
     }
 
 }

@@ -16,7 +16,8 @@
     <color name="blue_inactive">#6AAFF3</color>
     <color name="middle_gray">#959595</color>
     <color name="error">#FF0025</color>
-
+    <color name="transparent">#00000000</color>
+    <color name="item_selected">#7F000000</color>
 
 
 

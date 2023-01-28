@@ -1,23 +1,20 @@
 package com.nurlan1507.trackit.fragments
 
+import android.animation.ArgbEvaluator
+import android.animation.ValueAnimator
+import android.animation.ValueAnimator.AnimatorUpdateListener
 import android.app.DatePickerDialog
-import android.content.Context
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
-import android.graphics.drawable.GradientDrawable.Orientation
+import android.graphics.PorterDuff
 import android.os.Build
 import android.os.Bundle
 import android.view.*
 import android.widget.Button
-import android.widget.DatePicker
-import android.widget.Toast
+import android.widget.ImageView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.common.base.MoreObjects.ToStringHelper
 import com.nurlan1507.trackit.MainActivity
 import com.nurlan1507.trackit.R
 import com.nurlan1507.trackit.adapter.BackGroundImagesAdapter
@@ -25,12 +22,6 @@ import com.nurlan1507.trackit.adapter.GridItemDecoration
 import com.nurlan1507.trackit.data.projectBoardBackgrounds
 import com.nurlan1507.trackit.databinding.FragmentCreateProjectBinding
 import com.nurlan1507.trackit.viewmodels.ProjectViewModel
-import java.text.SimpleDateFormat
-import java.time.Instant
-import java.time.LocalDateTime
-import java.time.ZoneId
-import java.time.ZoneOffset
-import java.time.format.DateTimeFormatter
 import java.util.*
 
 class CreateProject : Fragment() {
@@ -59,8 +50,8 @@ class CreateProject : Fragment() {
             viewModel = sharedProjectViewModel
         }
         var recyclerView = _binding.imageList
-        val backGroundImagesAdapter = BackGroundImagesAdapter(projectBoardBackgrounds){
-
+        val backGroundImagesAdapter = BackGroundImagesAdapter(projectBoardBackgrounds){backGround ->
+            sharedProjectViewModel.setBackground(backGround.id)
         }
         recyclerView.layoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL,false)
         recyclerView.addItemDecoration(GridItemDecoration())
