@@ -49,9 +49,9 @@ class CreateProject : Fragment() {
         _binding.apply {
             viewModel = sharedProjectViewModel
         }
-        var recyclerView = _binding.imageList
-        val backGroundImagesAdapter = BackGroundImagesAdapter(projectBoardBackgrounds){backGround ->
-            sharedProjectViewModel.setBackground(backGround.id)
+        val recyclerView = _binding.imageList
+        val backGroundImagesAdapter = BackGroundImagesAdapter(requireContext(),projectBoardBackgrounds){
+            sharedProjectViewModel.setBackground(it.id)
         }
         recyclerView.layoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL,false)
         recyclerView.addItemDecoration(GridItemDecoration())
@@ -61,7 +61,6 @@ class CreateProject : Fragment() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
         val myCalendarStartDate = Calendar.getInstance()
         val myStartDatePicker = DatePickerDialog.OnDateSetListener { datePicker, year, month, day ->
             myCalendarStartDate.set(Calendar.YEAR, year)

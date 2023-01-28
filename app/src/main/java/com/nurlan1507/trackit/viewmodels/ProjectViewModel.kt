@@ -65,7 +65,7 @@ class ProjectViewModel:ViewModel() {
     }
 
     fun setBackground(imgId:Int){
-        _project.value?.image = imgId
+        _project.value?.image?.id = imgId
     }
 
 }

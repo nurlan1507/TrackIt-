@@ -10,13 +10,12 @@ enum class ProjectBoardBackgrounds(val rgb: Int){
     FOREST(R.drawable.board_forest_background),
 }
 
-class ProjectBackGround(val type:Int, val id:Int){
-
+class ProjectBackGround(val type:Int, var id:Int):java.io.Serializable{
+    constructor():this(1,R.drawable.board_lake_background)
 }
 
 public val projectBoardBackgrounds:List<ProjectBackGround> = listOf(
-    ProjectBackGround(1, Color.rgb(0,0,255)),
-    ProjectBackGround(1,Color.rgb(0,255,255)),
+    ProjectBackGround(2,R.drawable.board_lake_background),
     ProjectBackGround(1,Color.rgb(192,192,192)),
     ProjectBackGround(2, R.drawable.board_forest_background)
 )
