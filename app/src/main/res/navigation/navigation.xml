@@ -56,7 +56,11 @@
         android:id="@+id/createProject"
         android:name="com.nurlan1507.trackit.fragments.CreateProject"
         android:label="fragment_create_project"
-        tools:layout="@layout/fragment_create_project" />
+        tools:layout="@layout/fragment_create_project" >
+        <action
+            android:id="@+id/action_createProject_to_friendListFragment"
+            app:destination="@id/friendListFragment" />
+    </fragment>
     <fragment
         android:id="@+id/userSearch"
         android:name="com.nurlan1507.trackit.fragments.UserSearch"
@@ -78,4 +82,8 @@
             app:nullable="true"
             android:defaultValue="null" />
     </fragment>
+    <fragment
+        android:id="@+id/friendListFragment"
+        android:name="com.nurlan1507.trackit.fragments.FriendListFragment"
+        android:label="FriendListFragment" />
 </navigation>

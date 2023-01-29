@@ -12,9 +12,9 @@ class User(
     var email:String,
     var username:String,
     @ColumnInfo(name = "device_token")var deviceToken:String,
-    var friends:List<User>?,
+    var friends:ArrayList<User>?,
     @ColumnInfo(name = "avatar_url") var avatarUrl: String="noAva") {
-    constructor(): this("dummmy","DUMMYEMAL","asd", "deviceToken", listOf(),"ava")
+    constructor(): this("dummmy","DUMMYEMAL","asd", "deviceToken", arrayListOf(),"ava")
 
     fun <T :User?> withId(id:String):T{
         this.uid = id

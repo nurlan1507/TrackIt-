@@ -12,6 +12,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.messaging.FirebaseMessaging
 import com.nurlan1507.trackit.MainActivity
 import com.nurlan1507.trackit.data.User
+import com.nurlan1507.trackit.helpers.ApiFailure
 import com.nurlan1507.trackit.helpers.ApiResult
 import com.nurlan1507.trackit.helpers.ApiSuccess
 import com.nurlan1507.trackit.repositories.AuthRepository
@@ -27,16 +28,16 @@ class UserViewModel:ViewModel() {
     private var _user = MutableLiveData<User?>()
     private var _isAuth:MutableLiveData<Boolean> = MutableLiveData<Boolean>()
     private var _userList:MutableLiveData<List<User>> = MutableLiveData<List<User>>(listOf())
-    private var _friends:MutableLiveData<List<User>> = MutableLiveData<List<User>>(listOf())
+    var _friends:MutableLiveData<MutableList<User>> = MutableLiveData<MutableList<User>>(mutableListOf())
     //getters
     val user:LiveData<User?> =_user
     val userList get():LiveData<List<User>> = _userList
-    val friends:LiveData<List<User>> = _friends
+    val friends get():LiveData<MutableList<User>> = _friends
 
     fun setUser(newUser:User?){
         _user.value=newUser
     }
-    fun setFriends(friends:List<User>){
+    private fun setFriends(friends:ArrayList<User>){
         _friends.value = friends
     }
 
@@ -118,7 +119,11 @@ class UserViewModel:ViewModel() {
     fun getFriends(userId:String){
         viewModelScope.launch {
             val friends = userRepository.getFriends(userId)
-            if(friends is ApiSuccess) setFriends(friends.list as List<User>)
+            if(friends is ApiSuccess){
+                _friends.value = (friends.list as MutableList<User>)
+            }else if(friends is ApiFailure){
+                Log.d("APIFAILURE", friends.e.message.toString())
+            }
         }
     }
 
@@ -126,7 +131,6 @@ class UserViewModel:ViewModel() {
         viewModelScope.launch {
             val user = userRepository.getUser(userId)
             if (user is ApiSuccess){
-                Log.d("NUULL?", user.list.toString())
                 listener(user.list as User)
             }
         }
@@ -149,6 +153,7 @@ class UserViewModel:ViewModel() {
             }
         }
     }
+
 
 
 }

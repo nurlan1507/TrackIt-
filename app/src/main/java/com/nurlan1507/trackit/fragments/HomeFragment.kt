@@ -38,6 +38,7 @@ class HomeFragment : Fragment() {
         setHasOptionsMenu(true)
         (activity as AppCompatActivity).supportActionBar?.show()
 
+        userViewModel.getFriends(mAuth.currentUser?.uid.toString())
 
         Toast.makeText(requireContext(), userViewModel.user.value?.email.toString(),Toast.LENGTH_SHORT).show()
     }

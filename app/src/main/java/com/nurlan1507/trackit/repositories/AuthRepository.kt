@@ -38,7 +38,7 @@ class AuthRepository:IAuthRepository {
         try{
             val authRes = mAuth.createUserWithEmailAndPassword(email,password).await()
             if(authRes.user!= null){
-                val newUser = User(authRes.user!!.uid.toString(),email,username,getDeviceToken(),listOf())
+                val newUser = User(authRes.user!!.uid.toString(),email,username,getDeviceToken(),arrayListOf())
                 authRes.user!!.sendEmailVerification()
                 db.document(authRes.user!!.uid).set(newUser).await()
                 result = Success(newUser)

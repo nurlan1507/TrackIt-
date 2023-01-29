@@ -14,6 +14,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.nurlan1507.trackit.MainActivity
 import com.nurlan1507.trackit.R
@@ -119,7 +120,7 @@ class CreateProject : Fragment() {
                 _binding.dateError.text = "Deadline cannot be earlier than a start date"
                 return@setOnClickListener
             }
-
+            findNavController().navigate(R.id.action_createProject_to_friendListFragment)
         }
         super.onViewCreated(view, savedInstanceState)
     }

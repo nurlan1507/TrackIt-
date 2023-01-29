@@ -70,8 +70,19 @@ class UserRepository() :IUserRepository {
 
     override suspend fun getFriends(userId:String):ApiResult{
         return try{
+            var ind = 0
+            Log.d("userId", userId)
+            val friendsArray: MutableList<User> = mutableListOf<User>()
             val result = userCollection.document(userId).collection("friends").whereEqualTo("friend" , true).get().await()
-            ApiSuccess(result.toObjects(User::class.java))
+            for(document in result.documents){
+                val friend = userCollection.document(document.id).get().await()
+                val friendObj = friend.toObject(User::class.java)
+                if (friendObj != null) {
+                    friendsArray.add(friendObj)
+                }
+                Log.d("FR", friendsArray.get(0).email)
+            }
+            ApiSuccess(friendsArray)
         }catch (e:Exception){
             ApiFailure(e)
         }
