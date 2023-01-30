@@ -1,8 +1,10 @@
 package com.nurlan1507.trackit.adapter
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -14,7 +16,7 @@ import java.util.*
 
 const val FriendLayout = 0
 const val LetterLayout = 1
-class FriendsAdapter(val ctx:Context, private val itemList:ArrayList<FriendsAdapterItemClass>):RecyclerView.Adapter<ViewHolder>() {
+class FriendsAdapter(val ctx:Context, private val itemList:ArrayList<FriendsAdapterItemClass>, val onItemTouch:(friendView:View, motionEvent:MotionEvent)->Unit):RecyclerView.Adapter<ViewHolder>() {
 
     init{
         for(ind in 0..itemCount-1){
@@ -29,9 +31,14 @@ class FriendsAdapter(val ctx:Context, private val itemList:ArrayList<FriendsAdap
     }
 
     inner class ViewHolderFriend(val binding: FriendListItemBinding):RecyclerView.ViewHolder(binding.root){
+        @SuppressLint("ClickableViewAccessibility")
         fun bind(friend:User){
-            binding.email.text = "ASDASDASD"
+            binding.email.text = friend.email
             binding.username.text = friend.username
+            binding.root.setOnTouchListener{view,motionEvent ->
+                onItemTouch(binding.root,motionEvent)
+                true
+            }
         }
     }
     inner class ViewHolderLetter(val binding: ItemLetterFriendListBinding):RecyclerView.ViewHolder(binding.root){

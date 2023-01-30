@@ -1,13 +1,16 @@
 package com.nurlan1507.trackit.fragments
 
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.nurlan1507.trackit.R
@@ -47,8 +50,8 @@ class FriendListFragment : Fragment() {
         })
         val itemList:ArrayList<FriendsAdapterItemClass> = arrayListOf()
 
-        var firstLetter = friends[0].username.get(0)
-        itemList.add(FriendsAdapterItemClass(1,firstLetter.toString()))
+//        var firstLetter = friends[0].username.get(0)
+//        itemList.add(FriendsAdapterItemClass(1,firstLetter.toString()))
         for(ind in 0..  friends.size-1){
             val name1:Char = friends.get(ind).username.get(0)
             var name2:Char?
@@ -61,17 +64,31 @@ class FriendListFragment : Fragment() {
                 val friendObj = FriendsAdapterItemClass(0, friends.get(ind))
                 itemList.add(friendObj)
             }else{
-                val letterObj = FriendsAdapterItemClass(1,name1.toString())
+                val letterObj = FriendsAdapterItemClass(1,name1.toString().uppercase())
                 itemList.add(letterObj)
                 val friendObj = FriendsAdapterItemClass(0, friends.get(ind))
                 itemList.add(friendObj)
+                if(ind+1!=friends.size){
+                    itemList.add(FriendsAdapterItemClass(1, name2.toString().uppercase()))
+                    itemList.add(FriendsAdapterItemClass(0,friends.get(ind+1)))
+                }
             }
         }
 
-        val friendsAdapter = FriendsAdapter(requireContext(),itemList)
+        val friendsAdapter = FriendsAdapter(requireContext(),itemList){view,motionEvent ->
+            when(motionEvent.action){
+                MotionEvent.ACTION_DOWN -> {
+                    view.setBackgroundColor(requireContext().resources.getColor(R.color.middle_gray))
+                }
+                MotionEvent.ACTION_UP -> {
+                    view.setBackgroundColor(requireContext().resources.getColor(R.color.transparent)  )
+
+                }
+        }
+        }
         Log.d("SIZEARR", friendsAdapter.itemCount.toString())
+        friendList.addItemDecoration(DividerItemDecoration(requireContext(), RecyclerView.VERTICAL))
         friendList.layoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.VERTICAL,false)
         friendList.adapter = friendsAdapter
-
     }
 }

@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <androidx.constraintlayout.widget.ConstraintLayout
     android:id="@+id/user"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="10dp"
+    android:background="?attr/selectableItemBackground"
+    >
     <ImageView
         android:id="@+id/user_avatar"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:background="@drawable/avatar_shape"
         android:src="@drawable/user_default_avatar_foreground"
         app:layout_constraintStart_toStartOf="parent"
@@ -27,18 +31,29 @@
         app:layout_constraintBottom_toBottomOf="parent"
         >
         <TextView
-            android:id="@+id/email"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            tools:text="nurlanbaitassov@mail.ru"
-            style="@style/text_sm_normal"
-            />
-        <TextView
             android:id="@+id/username"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            tools:text="nurlanbaitassov@mail.ru"
+            style="@style/text_lg_normal"
+            />
+        <TextView
+            android:id="@+id/email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             tools:text="Nurlan Baitassov"
-            style="@style/text_xsm_normal"
+            style="@style/text_sm_large"
             />
     </LinearLayout>
+    <ImageView
+        android:id="@+id/friend_selected"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        app:layout_constraintStart_toEndOf="@+id/userdata_linear_layout"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:src="@drawable/tick"
+
+        />
 </androidx.constraintlayout.widget.ConstraintLayout>
