@@ -17,6 +17,9 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:listitem="@layout/user_list_item"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="?attr/selectableItemBackgroundBorderless"
         tools:itemCount="10"
         />
     <TextView
@@ -28,5 +31,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:textSize="14sp"
         android:textColor="#959595"
+        />
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/skip_create_project"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Create Project"
+        tools:text="Create Project"
+        style="@style/Widget.MaterialComponents.Button.Icon"
+        app:icon="@drawable/next_arrow"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         />
 </androidx.constraintlayout.widget.ConstraintLayout>

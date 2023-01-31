@@ -8,6 +8,9 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.CheckBox
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -16,14 +19,17 @@ import androidx.recyclerview.widget.RecyclerView
 import com.nurlan1507.trackit.R
 import com.nurlan1507.trackit.adapter.FriendsAdapter
 import com.nurlan1507.trackit.adapter.FriendsAdapterItemClass
+import com.nurlan1507.trackit.data.Project
 import com.nurlan1507.trackit.data.User
 import com.nurlan1507.trackit.databinding.FragmentFriendListBinding
+import com.nurlan1507.trackit.viewmodels.ProjectViewModel
 import com.nurlan1507.trackit.viewmodels.UserViewModel
 
 
 class FriendListFragment : Fragment() {
     private lateinit var binding:FragmentFriendListBinding
     private val userViewModel: UserViewModel by activityViewModels()
+    private val projectViewModel:ProjectViewModel by activityViewModels()
     private lateinit var friendList:RecyclerView
     private var friends:MutableList<User> = mutableListOf()
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -75,20 +81,27 @@ class FriendListFragment : Fragment() {
             }
         }
 
-        val friendsAdapter = FriendsAdapter(requireContext(),itemList){view,motionEvent ->
-            when(motionEvent.action){
-                MotionEvent.ACTION_DOWN -> {
-                    view.setBackgroundColor(requireContext().resources.getColor(R.color.middle_gray))
-                }
-                MotionEvent.ACTION_UP -> {
-                    view.setBackgroundColor(requireContext().resources.getColor(R.color.transparent)  )
-
-                }
-        }
+        val friendsAdapter = FriendsAdapter(requireContext(),itemList){view,friend ->
+            if(view.findViewById<CheckBox>(R.id.user_selected).isChecked){
+                view.findViewById<CheckBox>(R.id.user_selected).isChecked = false
+                projectViewModel.removeUser(friend)
+                true
+            }else if(!view.findViewById<CheckBox>(R.id.user_selected).isChecked){
+                view.findViewById<CheckBox>(R.id.user_selected).isChecked = true
+                projectViewModel.addUser(friend)
+                true
+            }
+            else{
+                false
+            }
         }
         Log.d("SIZEARR", friendsAdapter.itemCount.toString())
         friendList.addItemDecoration(DividerItemDecoration(requireContext(), RecyclerView.VERTICAL))
         friendList.layoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.VERTICAL,false)
         friendList.adapter = friendsAdapter
+
+        binding.skipCreateProject.setOnClickListener {
+
+        }
     }
 }

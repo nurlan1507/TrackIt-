@@ -16,28 +16,19 @@ import java.util.*
 
 const val FriendLayout = 0
 const val LetterLayout = 1
-class FriendsAdapter(val ctx:Context, private val itemList:ArrayList<FriendsAdapterItemClass>, val onItemTouch:(friendView:View, motionEvent:MotionEvent)->Unit):RecyclerView.Adapter<ViewHolder>() {
+class FriendsAdapter(val ctx:Context, private val itemList:ArrayList<FriendsAdapterItemClass>, val onItemTouch:(friendView:View, friend:User)->Boolean):RecyclerView.Adapter<ViewHolder>() {
 
-    init{
-        for(ind in 0..itemCount-1){
-            if(itemList.get(ind).viewType == 0){
-                Log.d("ITEML", itemList.get(ind).user.username.toString())
-
-            }else{
-                Log.d("ITEML", itemList.get(ind).letter.toString())
-
-            }
-        }
-    }
 
     inner class ViewHolderFriend(val binding: FriendListItemBinding):RecyclerView.ViewHolder(binding.root){
         @SuppressLint("ClickableViewAccessibility")
-        fun bind(friend:User){
+        fun bind(friend:User,position: Int){
             binding.email.text = friend.email
             binding.username.text = friend.username
-            binding.root.setOnTouchListener{view,motionEvent ->
-                onItemTouch(binding.root,motionEvent)
-                true
+            binding.root.setOnClickListener{view->
+                onItemTouch(view,friend)
+            }
+            binding.userSelected.setOnClickListener {view->
+                onItemTouch(view,friend)
             }
         }
     }
@@ -67,7 +58,7 @@ class FriendsAdapter(val ctx:Context, private val itemList:ArrayList<FriendsAdap
             (holder as ViewHolderLetter).bind(itemList.get(position).letter.toString())
 
         }else{
-            (holder as ViewHolderFriend).bind(itemList.get(position).user)
+            (holder as ViewHolderFriend).bind(itemList.get(position).user,position)
 
         }
     }

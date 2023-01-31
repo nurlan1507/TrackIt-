@@ -7,6 +7,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.nurlan1507.trackit.data.Project
+import com.nurlan1507.trackit.data.User
 import java.text.SimpleDateFormat
 import java.time.*
 import java.time.format.DateTimeFormatter
@@ -68,4 +69,21 @@ class ProjectViewModel:ViewModel() {
         _project.value?.image?.id = imgId
     }
 
+
+    fun addUser(user: User):Boolean{
+        try{
+            _project.value?.members?.add(user)
+            return true
+        }catch (e:Exception) {
+            return false
+        }
+    }
+    fun removeUser(user:User):Boolean{
+        try{
+            _project.value?.members?.remove(user)
+            return true
+        }catch (e:Exception) {
+            return false
+        }
+    }
 }

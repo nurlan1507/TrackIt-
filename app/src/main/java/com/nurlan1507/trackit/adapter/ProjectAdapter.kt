@@ -12,12 +12,12 @@ import com.nurlan1507.trackit.databinding.CardProjectBinding
 class ProjectAdapter(var onClickListener:(View,Project)->Unit): RecyclerView.Adapter<ProjectAdapter.ProjectViewHolder>() {
     val projects = listOf<Project>(
         Project("TrackIt!","Mobile app for tracking project progress", ProjectBackGround(),
-            listOf(),2,1),
-        Project("ChatApp!","ChatApp for communicate with friends", ProjectBackGround(),listOf(),1,2),
-        Project("ChatApp!","ChatApp for communicate with friends", ProjectBackGround(),listOf(),1,1),
-        Project("ChatApp!","ChatApp for communicate with friends", ProjectBackGround(),listOf(),1,1),
-        Project("ChatApp!","ChatApp for communicate with friends", ProjectBackGround(),listOf(),4,6),
-        Project("ChatApp!","ChatApp for communicate with friends", ProjectBackGround(),listOf(),5,5),
+            mutableListOf(),2,1),
+        Project("ChatApp!","ChatApp for communicate with friends", ProjectBackGround(), mutableListOf(),1,2),
+        Project("ChatApp!","ChatApp for communicate with friends", ProjectBackGround(), mutableListOf(),1,1),
+        Project("ChatApp!","ChatApp for communicate with friends", ProjectBackGround(), mutableListOf(),1,1),
+        Project("ChatApp!","ChatApp for communicate with friends", ProjectBackGround(), mutableListOf(),4,6),
+        Project("ChatApp!","ChatApp for communicate with friends", ProjectBackGround(), mutableListOf(),5,5),
     )
     inner class ProjectViewHolder(val binding: CardProjectBinding):RecyclerView.ViewHolder(binding.root)
 
