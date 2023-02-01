@@ -40,13 +40,14 @@ class FriendsAdapter(val ctx:Context, private val itemList:ArrayList<FriendsAdap
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when(viewType){
-            LetterLayout ->{
-                val binding = ItemLetterFriendListBinding.inflate(LayoutInflater.from(parent.context),parent,false)
-                ViewHolderLetter(binding)
-            }
-            else ->{
+
+            FriendLayout ->{
                 val binding = FriendListItemBinding.inflate(LayoutInflater.from(parent.context), parent,false)
                 ViewHolderFriend(binding)
+            }
+            else ->{
+                val binding = ItemLetterFriendListBinding.inflate(LayoutInflater.from(parent.context),parent,false)
+                ViewHolderLetter(binding)
             }
 
         }
@@ -56,8 +57,7 @@ class FriendsAdapter(val ctx:Context, private val itemList:ArrayList<FriendsAdap
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if(itemList.get(position).viewType == 1){
             (holder as ViewHolderLetter).bind(itemList.get(position).letter.toString())
-
-        }else{
+        }else if(itemList.get(position).viewType == 0){
             (holder as ViewHolderFriend).bind(itemList.get(position).user,position)
 
         }

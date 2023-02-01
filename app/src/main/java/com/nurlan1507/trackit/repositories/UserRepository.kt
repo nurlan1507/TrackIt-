@@ -73,7 +73,7 @@ class UserRepository() :IUserRepository {
                 if (friendObj != null) {
                     friendsArray.add(friendObj)
                 }
-                Log.d("FR", friendsArray.get(0).email)
+                Log.d("FR", friendsArray.size.toString())
             }
             ApiSuccess(friendsArray)
         }catch (e:Exception){

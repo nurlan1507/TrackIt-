@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -7,30 +7,19 @@
     android:layout_height="match_parent"
     android:paddingStart="16dp"
     android:paddingEnd="16dp"
+    android:orientation="vertical"
     tools:context=".fragments.FriendListFragment">
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/list_users"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         tools:listitem="@layout/user_list_item"
+        android:layout_weight="0.8"
         android:clickable="true"
         android:focusable="true"
         android:background="?attr/selectableItemBackgroundBorderless"
         tools:itemCount="10"
-        />
-    <TextView
-        android:id="@+id/no_users"
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/list_users"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:textSize="14sp"
-        android:textColor="#959595"
         />
     <com.google.android.material.button.MaterialButton
         android:id="@+id/skip_create_project"
@@ -39,8 +28,10 @@
         android:text="Create Project"
         tools:text="Create Project"
         style="@style/Widget.MaterialComponents.Button.Icon"
+        android:layout_gravity="end"
         app:icon="@drawable/next_arrow"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:iconGravity="end"
+        android:layout_weight="0.2"
+
         />
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

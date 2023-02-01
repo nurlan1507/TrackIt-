@@ -9,40 +9,26 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
     >
-
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".MainActivity">
-
+        android:orientation="vertical"
+        >
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:minHeight="?android:attr/actionBarSize"
-
             style="@style/Toolbar_normal"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             />
-
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/nav_host"
             android:name="androidx.navigation.fragment.NavHostFragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:defaultNavHost="true"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/toolbar"
             app:navGraph="@navigation/navigation" />
-
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-
+    </LinearLayout>
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_view"
@@ -51,8 +37,6 @@
         android:layout_gravity="start"
         app:headerLayout="@layout/drawer_header"
         app:menu="@menu/drawer_menu"
-
         tools:openDrawer="start"
         />
 </androidx.drawerlayout.widget.DrawerLayout>
-

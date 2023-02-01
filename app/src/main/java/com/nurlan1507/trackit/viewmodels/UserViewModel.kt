@@ -121,6 +121,7 @@ class UserViewModel:ViewModel() {
             val friends = userRepository.getFriends(userId)
             if(friends is ApiSuccess){
                 _friends.value = (friends.list as MutableList<User>)
+                Log.d("FRSIZE", _friends.value!!.size.toString())
             }else if(friends is ApiFailure){
                 Log.d("APIFAILURE", friends.e.message.toString())
             }

@@ -9,6 +9,8 @@
     <color name="white">#FFFFFFFF</color>
     <color name="accept">#00FF00</color>
     <color name="green">#234304</color>
+    <color name="project_background">#FDFCF8</color>
+    <color name="light_gray">#E5E5E5</color>
 
 
     <color name="blue_main">#197BDD</color>

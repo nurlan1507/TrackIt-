@@ -7,6 +7,8 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.constraintlayout.widget.ConstraintSet.Layout
 import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
@@ -72,7 +74,6 @@ class MainActivity: AppCompatActivity(), DrawerController {
 
         setupActionBarWithNavController(navController,drawerLayout)
         navigationView.setupWithNavController(navController)
-
 
 
         navigationView.setNavigationItemSelectedListener {

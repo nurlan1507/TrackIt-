@@ -197,4 +197,10 @@
 
 
 
+
+    <style name="text_xxl_normal" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">25sp</item>
+        <item name="android:fontFamily">@font/robotomedium</item>
+    </style>
+
 </resources>
