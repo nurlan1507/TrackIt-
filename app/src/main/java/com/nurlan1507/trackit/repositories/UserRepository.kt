@@ -17,13 +17,6 @@ class UserRepository() :IUserRepository {
     private val db = FirebaseFirestore.getInstance()
     private val userCollection = db.collection("users")
 
-    init{
-        Log.d("PushNotification",FirebaseAuth.getInstance().currentUser?.uid.toString())
-
-
-
-
-    }
 
     override suspend fun findUsers(email:String): List<User> {
         val result = userCollection.orderBy("email").limit(10).startAt(email).endAt("${email}\uf8ff").get().await()
@@ -112,6 +105,20 @@ class UserRepository() :IUserRepository {
             return ApiSuccess()
         }catch (e:Exception){
             return ApiFailure(e)
+        }
+    }
+
+
+    override suspend fun addAProjectToUser(userId: String,projectId:String ): ApiResult {
+        return try{
+            db.collection("users").
+            document(userId).collection("projects").
+            document(projectId).set(mapOf("id" to projectId)).await()
+            Log.d("Success","SUUUUUUI")
+            ApiSuccess()
+        }catch (e:Exception){
+            Log.d("Failure",e.message.toString())
+            ApiFailure(e)
         }
     }
 }

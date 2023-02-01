@@ -23,10 +23,12 @@ import com.nurlan1507.trackit.adapter.GridItemDecoration
 import com.nurlan1507.trackit.data.projectBoardBackgrounds
 import com.nurlan1507.trackit.databinding.FragmentCreateProjectBinding
 import com.nurlan1507.trackit.viewmodels.ProjectViewModel
+import com.nurlan1507.trackit.viewmodels.UserViewModel
 import java.util.*
 
 class CreateProject : Fragment() {
     private val sharedProjectViewModel: ProjectViewModel by activityViewModels()
+    private val userViewModel: UserViewModel by activityViewModels()
     private lateinit var _binding:FragmentCreateProjectBinding
 
 
@@ -120,7 +122,10 @@ class CreateProject : Fragment() {
                 _binding.dateError.text = "Deadline cannot be earlier than a start date"
                 return@setOnClickListener
             }
-            findNavController().navigate(R.id.action_createProject_to_friendListFragment)
+            sharedProjectViewModel.setProjectData(_binding.inputProjectName.text.toString(), _binding.descriptionInput.text.toString(), userViewModel.user.value!!){
+                findNavController().navigate(R.id.action_createProject_to_friendListFragment)
+                true
+            }
         }
         super.onViewCreated(view, savedInstanceState)
     }

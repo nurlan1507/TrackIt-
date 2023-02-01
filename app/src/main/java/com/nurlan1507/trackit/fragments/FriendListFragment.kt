@@ -16,12 +16,17 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.work.OneTimeWorkRequest
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
+import androidx.work.workDataOf
 import com.nurlan1507.trackit.R
 import com.nurlan1507.trackit.adapter.FriendsAdapter
 import com.nurlan1507.trackit.adapter.FriendsAdapterItemClass
 import com.nurlan1507.trackit.data.Project
 import com.nurlan1507.trackit.data.User
 import com.nurlan1507.trackit.databinding.FragmentFriendListBinding
+import com.nurlan1507.trackit.utils.ProjectWorker
 import com.nurlan1507.trackit.viewmodels.ProjectViewModel
 import com.nurlan1507.trackit.viewmodels.UserViewModel
 
@@ -84,11 +89,11 @@ class FriendListFragment : Fragment() {
         val friendsAdapter = FriendsAdapter(requireContext(),itemList){view,friend ->
             if(view.findViewById<CheckBox>(R.id.user_selected).isChecked){
                 view.findViewById<CheckBox>(R.id.user_selected).isChecked = false
-                projectViewModel.removeUser(friend)
+                projectViewModel.removeUser(friend.uid)
                 true
             }else if(!view.findViewById<CheckBox>(R.id.user_selected).isChecked){
                 view.findViewById<CheckBox>(R.id.user_selected).isChecked = true
-                projectViewModel.addUser(friend)
+                projectViewModel.addUser(friend.uid)
                 true
             }
             else{
@@ -101,7 +106,13 @@ class FriendListFragment : Fragment() {
         friendList.adapter = friendsAdapter
 
         binding.skipCreateProject.setOnClickListener {
-
+            projectViewModel.createProject(){
+                val workManager = WorkManager.getInstance(requireContext())
+                val request = OneTimeWorkRequestBuilder<ProjectWorker>()
+                    .setInputData(workDataOf("memberList" to it.members.toTypedArray(),"projectId" to it.id))
+                    .build()
+                workManager.enqueue(request)
+            }
         }
     }
 }

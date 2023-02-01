@@ -11,4 +11,5 @@ interface IUserRepository {
     suspend fun getPendingFriends(userId:String):ApiResult
     suspend fun getUser(userId:String):ApiResult
     suspend fun addFriendToSender(senderId:String,receiver:String):ApiResult
+    suspend fun addAProjectToUser(userId:String, projectId:String):ApiResult
 }

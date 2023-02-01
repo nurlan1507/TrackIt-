@@ -2,23 +2,29 @@ package com.nurlan1507.trackit.viewmodels
 
 import android.icu.util.LocaleData
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
+import com.google.firebase.auth.FirebaseAuth
 import com.nurlan1507.trackit.data.Project
 import com.nurlan1507.trackit.data.User
+import com.nurlan1507.trackit.helpers.ApiSuccess
+import com.nurlan1507.trackit.repositories.ProjectRepo
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.time.*
 import java.time.format.DateTimeFormatter
 import java.util.*
 
 class ProjectViewModel:ViewModel() {
+    //repository
+    private val projectRepository = ProjectRepo.projectRepo
+
     //list of projects
     private var _projects:MutableLiveData<List<Project>> = MutableLiveData<List<Project>>()
     val projects:LiveData<List<Project>> = _projects
     //project object that is going to be created
-    private var _project:MutableLiveData<Project> = MutableLiveData<Project>()
+    private var _project:MutableLiveData<Project> = MutableLiveData<Project>(Project())
     val project:LiveData<Project> get() = _project
 
     private var _startDate:MutableLiveData<Long?> = MutableLiveData<Long?>(System.currentTimeMillis())
@@ -70,20 +76,48 @@ class ProjectViewModel:ViewModel() {
     }
 
 
-    fun addUser(user: User):Boolean{
+
+    fun setProjectData(title:String, description: String, adminUser:User, listener:()->Boolean){
         try{
-            _project.value?.members?.add(user)
+            _project.value?.title = title
+            _project.value?.description = description
+            _project.value?.admins = mutableListOf(adminUser)
+            listener()
+        }catch (e:Exception){
+            Log.d("Err", e.message.toString())
+        }
+
+
+    }
+    fun addUser(userId: String):Boolean{
+        try{
+            _project.value?.members?.add(userId)
             return true
         }catch (e:Exception) {
             return false
         }
     }
-    fun removeUser(user:User):Boolean{
+    fun removeUser(userId: String):Boolean{
         try{
-            _project.value?.members?.remove(user)
+            _project.value?.members?.remove(userId)
             return true
         }catch (e:Exception) {
             return false
+        }
+    }
+
+    fun createProject(listener: (project:Project) -> Unit){
+        viewModelScope.launch {
+            if(_project.value != null){
+                var result = projectRepository.createProject(_project.value!!)
+                if(result is ApiSuccess){
+                    listener(result.list as Project)
+                }else{
+
+                }
+            }else{
+                return@launch
+            }
         }
     }
 }
