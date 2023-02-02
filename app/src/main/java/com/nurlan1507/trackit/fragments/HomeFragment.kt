@@ -23,6 +23,7 @@ import com.nurlan1507.trackit.data.notifications.FriendNotification
 import com.nurlan1507.trackit.data.notifications.Notification
 import com.nurlan1507.trackit.databinding.FragmentHomeBinding
 import com.nurlan1507.trackit.viewmodels.NotificationViewModel
+import com.nurlan1507.trackit.viewmodels.ProjectViewModel
 import com.nurlan1507.trackit.viewmodels.UserViewModel
 
 class HomeFragment : Fragment() {
@@ -31,6 +32,7 @@ class HomeFragment : Fragment() {
     private lateinit var mAuth:FirebaseAuth
     private val userViewModel:UserViewModel by activityViewModels()
     private val notificationsViewModel:NotificationViewModel by activityViewModels()
+    private val sharedProjectViewModel:ProjectViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -76,7 +78,7 @@ class HomeFragment : Fragment() {
 
         val projectRecyclerView:RecyclerView = binding.projectsList
         projectRecyclerView.addItemDecoration(GridItemDecoration())
-        projectRecyclerView.adapter = ProjectAdapter {
+        projectRecyclerView.adapter = ProjectAdapter(sharedProjectViewModel.projects.value) {
             it,project->
             val popupMenu = PopupMenu(requireContext(),it)
             popupMenu.menuInflater.inflate(R.menu.project_long_menu,popupMenu.menu)

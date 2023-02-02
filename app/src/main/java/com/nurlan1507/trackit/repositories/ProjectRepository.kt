@@ -5,6 +5,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.toObject
 import com.nurlan1507.trackit.data.Project
+import com.nurlan1507.trackit.data.User_Project
 import com.nurlan1507.trackit.helpers.ApiFailure
 import com.nurlan1507.trackit.helpers.ApiResult
 import com.nurlan1507.trackit.helpers.ApiSuccess
@@ -12,6 +13,7 @@ import kotlinx.coroutines.tasks.await
 
 class ProjectRepository:IProjectInterface {
     private val projectCollection = FirebaseFirestore.getInstance().collection("projects")
+    private val junctionCollection = FirebaseFirestore.getInstance().collection("junction_user_project")
     private val mAuth = FirebaseAuth.getInstance()
     override suspend fun createProject(project: Project): ApiResult {
         return try {
@@ -33,11 +35,44 @@ class ProjectRepository:IProjectInterface {
         }
     }
 
+    override suspend fun addAdminJunction(userId: String,projectId:String): ApiResult {
+        return try{
+            val bridgeTable = User_Project(userId,projectId)
+            junctionCollection.document(userId+"_"+projectId).set(bridgeTable).await()
+            ApiSuccess()
+        }catch (e:Exception){
+            ApiFailure(e)
+        }
+    }
+
+    override suspend fun addUserJunction(userId: String, projectId: String): ApiResult {
+        return try{
+            val bridgeTable = User_Project(userId,projectId)
+            junctionCollection.document(userId+"_"+projectId).set(bridgeTable).await()
+            ApiSuccess()
+        }catch (e:Exception){
+            ApiFailure(e)
+        }
+    }
+
+
     override suspend fun getProject(id: String): ApiResult {
         TODO("Not yet implemented")
     }
 
-
+    override suspend fun getProjects(userId: String): ApiResult {
+        return try{
+            val bridgeTableDocs =  junctionCollection.whereEqualTo("userId", userId).get().await()
+            val projects = mutableListOf<Project>()
+            for(document in bridgeTableDocs.documents){
+                val project = projectCollection.document(document.data?.get("projectId").toString()).get().await()
+                projects.add(project.toObject(Project::class.java)!!)
+            }
+            ApiSuccess(projects)
+        }catch (e:Exception){
+            ApiFailure(e)
+        }
+    }
 }
 
 object ProjectRepo{

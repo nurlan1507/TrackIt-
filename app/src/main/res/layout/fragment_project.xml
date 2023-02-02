@@ -1,134 +1,138 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+<layout
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    tools:context=".fragments.ProjectFragment"
-    android:padding="16dp">
-
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/project_card"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <variable name="projectViewModel" type="com.nurlan1507.trackit.viewmodels.ProjectViewModel"/>
+    </data>
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:cardElevation="1dp"
-        app:cardCornerRadius="10dp"
-        app:strokeWidth="1dp"
-        app:strokeColor="@color/middle_gray"
-        app:cardBackgroundColor="@color/project_background"
-        >
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/card_project_constraint"
-            android:padding="16dp"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".fragments.ProjectFragment"
+        android:padding="16dp">
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/project_card"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <TextView
-                android:id="@+id/card_project_header"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Total"
-                tools:text="Total"
-                style="@style/text_header_normal"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                />
-            <TextView
-                android:id="@+id/progress_number"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="0"
-                tools:text="0"
-                style="@style/text_xxl_normal"
-                app:layout_constraintTop_toBottomOf="@id/card_project_header"
-                app:layout_constraintStart_toStartOf="parent"
-                />
-            <TextView
-                android:id="@+id/percent"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="18sp"
-                android:text="%"
-                app:layout_constraintTop_toTopOf="@id/progress_number"
-                app:layout_constraintStart_toEndOf="@id/progress_number"
-                tools:text="%"
-                />
-            <ProgressBar
-                android:id="@+id/progress_bar"
+            android:layout_height="wrap_content"
+            app:cardElevation="1dp"
+            app:cardCornerRadius="10dp"
+            app:strokeWidth="1dp"
+            app:strokeColor="@color/middle_gray"
+            app:cardBackgroundColor="@color/project_background">
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/card_project_constraint"
+                android:padding="16dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                style="?android:attr/progressBarStyleHorizontal"
-                app:layout_constraintTop_toBottomOf="@id/progress_number"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                />
-            <LinearLayout
-                android:id="@+id/date_linear_layout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:divider="@drawable/linear_layout_dividor_create_project"
-                android:showDividers="middle"
-                android:layout_marginTop="15dp"
-                app:layout_constraintTop_toBottomOf="@id/progress_bar"
-                app:layout_constraintStart_toStartOf="parent"
-                >
-                <ImageView
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/card_project_header"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_baseline_date_range_24"
-                    android:contentDescription="Date icon"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="2dp"
-                    />
-                <Button
-                    android:id="@+id/start_date_btn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="10dp"
-                    android:backgroundTint="@color/white"
-                    style="?attr/materialButtonOutlinedStyle"
-                    android:textStyle="bold"
-                    android:textColor="@color/black"
-                    tools:text="Feb 21,2023"
+                    android:text="Total"
+                    tools:text="Total"
+                    style="@style/text_header_normal"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
                     />
                 <TextView
+                    android:id="@+id/progress_number"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="-"
+                    android:text="0"
+                    tools:text="0"
+                    style="@style/text_xxl_normal"
+                    app:layout_constraintTop_toBottomOf="@id/card_project_header"
+                    app:layout_constraintStart_toStartOf="parent"
                     />
-                <Button
-                    android:id="@+id/end_date_btn"
+                <TextView
+                    android:id="@+id/percent"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="10dp"
-                    android:textStyle="bold"
-                    android:textColor="@color/black"
-                    android:backgroundTint="@color/white"
-                    style="?attr/materialButtonOutlinedStyle"
-                    tools:text="Feb 21,2023"
+                    android:textSize="18sp"
+                    android:text="%"
+                    app:layout_constraintTop_toTopOf="@id/progress_number"
+                    app:layout_constraintStart_toEndOf="@id/progress_number"
+                    tools:text="%"
                     />
-            </LinearLayout>
+                <ProgressBar
+                    android:id="@+id/progress_bar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    app:layout_constraintTop_toBottomOf="@id/progress_number"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    />
+                <LinearLayout
+                    android:id="@+id/date_linear_layout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:divider="@drawable/linear_layout_dividor_create_project"
+                    android:showDividers="middle"
+                    android:layout_marginTop="15dp"
+                    app:layout_constraintTop_toBottomOf="@id/progress_bar"
+                    app:layout_constraintStart_toStartOf="parent"
+                    >
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_baseline_date_range_24"
+                        android:contentDescription="Date icon"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="2dp"
+                        />
+                    <Button
+                        android:id="@+id/start_date_btn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="10dp"
+                        android:backgroundTint="@color/white"
+                        style="?attr/materialButtonOutlinedStyle"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"
+                        android:text="@{projectViewModel.startDate()}"
+                        />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="-"
+                        />
+                    <Button
+                        android:id="@+id/end_date_btn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="10dp"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"
+                        android:backgroundTint="@color/white"
+                        style="?attr/materialButtonOutlinedStyle"
+                        android:text="@{projectViewModel.endDate()}"
+                        />
+                </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/time_left_container"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:divider="@drawable/linear_layout_dividor_create_project"
-                android:showDividers="middle"
-                android:layout_marginTop="15dp"
-                app:layout_constraintTop_toBottomOf="@id/date_linear_layout"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                >
-                <ImageView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:id="@+id/time_left_container"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_baseline_alarm_24"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginLeft="2dp"
-                    />
+                    android:orientation="horizontal"
+                    android:divider="@drawable/linear_layout_dividor_create_project"
+                    android:showDividers="middle"
+                    android:layout_marginTop="15dp"
+                    app:layout_constraintTop_toBottomOf="@id/date_linear_layout"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    >
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_baseline_alarm_24"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginStart="2dp"
+                        />
                     <TextView
                         android:id="@+id/days_left"
                         android:layout_width="wrap_content"
@@ -136,49 +140,50 @@
                         android:text="Days left - 1 Day"
                         style="@style/text_sm_normal"
                         />
-            </LinearLayout>
+                </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/description_container"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:divider="@drawable/linear_layout_dividor_create_project"
-                android:showDividers="middle"
-                android:layout_marginTop="15dp"
-                app:layout_constraintTop_toBottomOf="@id/time_left_container"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                >
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_baseline_drive_file_rename_outline_24"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginLeft="2dp"
-                    />
-                <EditText
-                    android:id="@+id/description_input"
+                <LinearLayout
+                    android:id="@+id/description_container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textMultiLine"
-                    android:paddingStart="10dp"
-                    android:paddingTop="5dp"
-                    android:paddingEnd="10dp"
-                    android:paddingBottom="5dp"
-                    style="@style/text_sm_normal"
-                    android:textColor="@color/black"
-                    android:text="sdassdkjsdsdsdsdsdsdsdjsdjsdjjsdjsdjsdjsdjsdjsdjsdjjsdjsdjsdjsdjsdjsdjdjsdjkd"
-                    android:background="@color/light_gray"
-                    />
-            </LinearLayout>
+                    android:orientation="horizontal"
+                    android:divider="@drawable/linear_layout_dividor_create_project"
+                    android:showDividers="middle"
+                    android:layout_marginTop="15dp"
+                    app:layout_constraintTop_toBottomOf="@id/time_left_container"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    >
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_baseline_drive_file_rename_outline_24"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginLeft="2dp"
+                        />
+                    <EditText
+                        android:id="@+id/description_input"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textMultiLine"
+                        android:paddingStart="10dp"
+                        android:paddingTop="5dp"
+                        android:paddingEnd="10dp"
+                        android:paddingBottom="5dp"
+                        style="@style/text_sm_normal"
+                        android:textColor="@color/black"
+                        android:text="@{projectViewModel.project.description}"
+                        android:background="@color/light_gray"
+                        />
+                </LinearLayout>
 
 
 
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 
-    </com.google.android.material.card.MaterialCardView>
-</LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+    </LinearLayout>
+</layout>

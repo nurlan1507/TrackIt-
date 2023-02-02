@@ -14,6 +14,7 @@ import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -71,32 +72,34 @@ class FriendListFragment : Fragment() {
             o1.username.compareTo(o2.username)
         })
         val itemList:ArrayList<FriendsAdapterItemClass> = arrayListOf()
-
-        var firstLetter = friends[0].username.get(0)
-        itemList.add(FriendsAdapterItemClass(1,firstLetter.toString()))
-        itemList.add(FriendsAdapterItemClass(0, friends[0]))
-        for(ind in 0 until friends.size){
-            val name1:Char = friends.get(ind).username.get(0)
-            var name2:Char?
-            if(ind!=friends.size-1){
-                name2 = friends.get(ind + 1).username.get(0)
-            }else{
-                name2 = null
-            }
-            if((name1 == name2 || name2 == null ) && (ind != friends.size -1)){
-                val friendObj = FriendsAdapterItemClass(0, friends.get(ind))
-                itemList.add(friendObj)
-            }else{
+        if(friends.size!=0){
+            var firstLetter = friends[0].username.get(0)
+            itemList.add(FriendsAdapterItemClass(1,firstLetter.toString()))
+            itemList.add(FriendsAdapterItemClass(0, friends[0]))
+            for(ind in 0 until friends.size){
+                val name1:Char = friends.get(ind).username.get(0)
+                var name2:Char?
+                if(ind!=friends.size-1){
+                    name2 = friends.get(ind + 1).username.get(0)
+                }else{
+                    name2 = null
+                }
+                if((name1 == name2 || name2 == null ) && (ind != friends.size -1)){
+                    val friendObj = FriendsAdapterItemClass(0, friends.get(ind))
+                    itemList.add(friendObj)
+                }else{
 //                val letterObj = FriendsAdapterItemClass(1,name1.toString().uppercase())
 //                itemList.add(letterObj)
 //                val friendObj = FriendsAdapterItemClass(0, friends.get(ind))
 //                itemList.add(friendObj)
-                if(ind+1!=friends.size){
-                    itemList.add(FriendsAdapterItemClass(1, name2.toString().uppercase()))
-                    itemList.add(FriendsAdapterItemClass(0,friends.get(ind+1)))
+                    if(ind+1!=friends.size){
+                        itemList.add(FriendsAdapterItemClass(1, name2.toString().uppercase()))
+                        itemList.add(FriendsAdapterItemClass(0,friends.get(ind+1)))
+                    }
                 }
             }
         }
+
 
         val friendsAdapter = FriendsAdapter(requireContext(),itemList){view,friend ->
             if(view.findViewById<CheckBox>(R.id.user_selected).isChecked){
@@ -133,7 +136,8 @@ class FriendListFragment : Fragment() {
                     .build()
                 workManager.enqueue(request)
                 createProjectBtn.icon = icon
-
+                val action = FriendListFragmentDirections.actionFriendListFragmentToProjectFragment(it.id, it.title)
+                findNavController().navigate(action)
             }
 
 

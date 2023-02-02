@@ -8,6 +8,7 @@ import androidx.lifecycle.*
 import com.google.firebase.auth.FirebaseAuth
 import com.nurlan1507.trackit.data.Project
 import com.nurlan1507.trackit.data.User
+import com.nurlan1507.trackit.helpers.ApiFailure
 import com.nurlan1507.trackit.helpers.ApiSuccess
 import com.nurlan1507.trackit.repositories.ProjectRepo
 import kotlinx.coroutines.launch
@@ -111,12 +112,24 @@ class ProjectViewModel:ViewModel() {
             if(_project.value != null){
                 var result = projectRepository.createProject(_project.value!!)
                 if(result is ApiSuccess){
+                    projectRepository.addAdminJunction((result.list as Project).admins[0].uid, (result.list as Project).id)
                     listener(result.list as Project)
                 }else{
 
                 }
             }else{
                 return@launch
+            }
+        }
+    }
+
+    fun getProjects(userId:String){
+        viewModelScope.launch {
+            val projectRes = projectRepository.getProject(userId)
+            if(projectRes is ApiSuccess){
+                _projects.value = (projectRes.list as List<Project>)
+            }else if(projectRes is ApiFailure){
+                Log.d("getProjects", projectRes.e.message.toString())
             }
         }
     }

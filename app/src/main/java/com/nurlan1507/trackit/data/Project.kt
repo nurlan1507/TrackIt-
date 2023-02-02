@@ -14,3 +14,10 @@ class Project(
     }
 
 }
+
+class User_Project(
+    var userId:String,
+    var projectId:String
+){
+    constructor():this("asd","ASD")
+}

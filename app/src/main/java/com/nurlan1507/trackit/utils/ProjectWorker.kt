@@ -17,7 +17,7 @@ class ProjectWorker(var ctx: Context, args:WorkerParameters): CoroutineWorker(ct
         val projectId = inputData.getString("projectId")
         if (listOfUsers != null && projectId != null) {
             for(userId in listOfUsers){
-                userRepo.addAProjectToUser(userId,projectId)
+                projectRepo.addUserJunction(userId,projectId)
                 Log.d("sukablyat","suka")
             }
         }
