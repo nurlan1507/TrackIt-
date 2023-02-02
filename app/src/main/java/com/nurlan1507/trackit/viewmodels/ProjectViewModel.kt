@@ -32,7 +32,7 @@ class ProjectViewModel:ViewModel() {
     private var _endDate:MutableLiveData<Long?> = MutableLiveData<Long?>(null)
     val endDate:LiveData<Long?> = _startDate
 
-    var formatterInstance = SimpleDateFormat("MMM, dd yyyy", Locale.getDefault())
+    var formatterInstance = SimpleDateFormat("dd MMM yyyy", Locale.ENGLISH)
     init{
         formatterInstance.timeZone = TimeZone.getTimeZone("UTC")
     }
@@ -40,7 +40,7 @@ class ProjectViewModel:ViewModel() {
 
     fun startDate():String{
         return if(_startDate.value != null) {
-            var date = Date(_startDate.value!! * 1000)
+            var date = Date(_startDate.value!!)
             formatterInstance.format(date)
         } else formatterInstance.format(Date(System.currentTimeMillis()))
     }
@@ -57,7 +57,7 @@ class ProjectViewModel:ViewModel() {
 
     fun endDate():String{
         return if(_endDate.value !=null) {
-            formatterInstance.format(Date(_endDate.value!! * 1000))
+            formatterInstance.format(Date(_endDate.value!!))
         } else "No date"
     }
 
@@ -83,6 +83,8 @@ class ProjectViewModel:ViewModel() {
             _project.value?.title = title
             _project.value?.description = description
             _project.value?.admins = mutableListOf(adminUser.uid)
+            _project.value!!.endDate = endDate.value!!
+            _project.value!!.startDate = _startDate.value!!
             listener()
         }catch (e:Exception){
             Log.d("Err", e.message.toString())
@@ -110,6 +112,7 @@ class ProjectViewModel:ViewModel() {
     fun createProject(listener: (project:Project) -> Unit){
         viewModelScope.launch {
             if(_project.value != null){
+
                 var result = projectRepository.createProject(_project.value!!)
                 if(result is ApiSuccess){
                     projectRepository.addAdminJunction((result.list as Project).admins[0], (result.list as Project).id)
@@ -133,5 +136,12 @@ class ProjectViewModel:ViewModel() {
                 Log.d("getProjects", projectRes.e.message.toString())
             }
         }
+    }
+
+    fun setProject(project:Project){
+        _project.value = project
+        setEndDate(project.endDate)
+        setStartDate(project.startDate)
+
     }
 }

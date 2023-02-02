@@ -81,32 +81,37 @@ class HomeFragment : Fragment() {
             lifecycleOwner = viewLifecycleOwner
         }
 
-        sharedProjectViewModel.getProjects(mAuth.currentUser?.uid.toString()) { list->
+        sharedProjectViewModel.getProjects(mAuth.currentUser?.uid.toString() ) { list->
             _binding.projectsListProgressBa.visibility = View.GONE
-            val projectAdapter = ProjectAdapter(list ) { it, project ->
-
-                val popupMenu = PopupMenu(requireContext(), it)
-                popupMenu.menuInflater.inflate(R.menu.project_long_menu, popupMenu.menu)
-                popupMenu.setOnMenuItemClickListener {
-                    when (it.itemId) {
-                        R.id.leave_project ->
-                            Toast.makeText(requireContext(), "Leave project", Toast.LENGTH_SHORT)
-                                .show()
-                        R.id.invitation_link ->
-                            Toast.makeText(requireContext(), "invitation link", Toast.LENGTH_LONG)
-                                .show()
-                        R.id.add_to_favorites ->
-                            Toast.makeText(requireContext(), "addtofavoriites", Toast.LENGTH_SHORT)
-                                .show()
+            val projectAdapter = ProjectAdapter(list, onClickListener ={ view, project ->
+                sharedProjectViewModel.setProject(project)
+                val action = HomeFragmentDirections.actionHomeFragmentToProjectFragment(project.id,project.title)
+                findNavController().navigate(action)
+            },
+                onLongClickListener =  { it, project ->
+                    val popupMenu = PopupMenu(requireContext(), it)
+                    popupMenu.menuInflater.inflate(R.menu.project_long_menu, popupMenu.menu)
+                    popupMenu.setOnMenuItemClickListener {
+                        when (it.itemId) {
+                            R.id.leave_project ->
+                                Toast.makeText(requireContext(), "Leave project", Toast.LENGTH_SHORT)
+                                    .show()
+                            R.id.invitation_link ->
+                                Toast.makeText(requireContext(), "invitation link", Toast.LENGTH_LONG)
+                                    .show()
+                            R.id.add_to_favorites ->
+                                Toast.makeText(requireContext(), "addtofavoriites", Toast.LENGTH_SHORT)
+                                    .show()
+                        }
+                        true
                     }
-                    true
+                    if (project.title == "TrackIt!") {
+                        popupMenu.menu.removeItem(R.id.add_to_favorites)
+                        popupMenu.menu.add(1, R.id.add_to_favorites, 1, "remove from favorites")
+                    }
+                    popupMenu.show()
                 }
-                if (project.title == "TrackIt!") {
-                    popupMenu.menu.removeItem(R.id.add_to_favorites)
-                    popupMenu.menu.add(1, R.id.add_to_favorites, 1, "remove from favorites")
-                }
-                popupMenu.show()
-            }
+                )
             val projectRecyclerView: RecyclerView = binding.projectsList
             projectRecyclerView.addItemDecoration(GridItemDecoration())
             projectRecyclerView.adapter = projectAdapter

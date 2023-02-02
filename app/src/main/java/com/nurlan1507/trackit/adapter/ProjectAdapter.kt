@@ -14,7 +14,7 @@ import com.nurlan1507.trackit.data.Project
 import com.nurlan1507.trackit.data.ProjectBackGround
 import com.nurlan1507.trackit.databinding.CardProjectBinding
 
-class ProjectAdapter(var projects:List<Project>, var onClickListener:(View,Project)->Unit): RecyclerView.Adapter<ProjectAdapter.ProjectViewHolder>() {
+class ProjectAdapter(var projects:List<Project>, var onClickListener:(View,Project)->Unit, var onLongClickListener:(View,Project)->Unit): RecyclerView.Adapter<ProjectAdapter.ProjectViewHolder>() {
 
     inner class ProjectViewHolder(val binding: CardProjectBinding):RecyclerView.ViewHolder(binding.root)
     init{
@@ -34,13 +34,15 @@ class ProjectAdapter(var projects:List<Project>, var onClickListener:(View,Proje
 
 
         holder.itemView.setOnLongClickListener{
-            onClickListener(it,projects.get(position))
+            onLongClickListener(it,projects.get(position))
             true
         }
 
         holder.binding.starProjectBtn?.setOnClickListener {
+            onLongClickListener(it,projects.get(position))
+        }
+        holder.itemView.setOnClickListener {
             onClickListener(it,projects.get(position))
-            true
         }
     }
 

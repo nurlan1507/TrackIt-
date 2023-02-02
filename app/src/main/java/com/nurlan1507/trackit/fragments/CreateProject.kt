@@ -69,7 +69,7 @@ class CreateProject : Fragment() {
             myCalendarStartDate.set(Calendar.YEAR, year)
             myCalendarStartDate.set(Calendar.MONTH, month)
             myCalendarStartDate.set(Calendar.DAY_OF_MONTH, day)
-            sharedProjectViewModel.setStartDate(myCalendarStartDate.time.toInstant().epochSecond)
+            sharedProjectViewModel.setStartDate(myCalendarStartDate.time.toInstant().toEpochMilli())
             startDateBtn.text = sharedProjectViewModel.startDate()
         }
         val startDateDialog = DatePickerDialog(requireContext(), myStartDatePicker,
@@ -84,7 +84,7 @@ class CreateProject : Fragment() {
             myCalendarEndDate.set(Calendar.YEAR,year)
             myCalendarEndDate.set(Calendar.MONTH,month)
             myCalendarEndDate.set(Calendar.DAY_OF_MONTH,day)
-            sharedProjectViewModel.setEndDate(myCalendarEndDate.time.toInstant().epochSecond)
+            sharedProjectViewModel.setEndDate(myCalendarEndDate.time.toInstant().toEpochMilli())
             endDateBtn.text = sharedProjectViewModel.endDate()
         }
         val endDateDialog = DatePickerDialog(requireContext(), myEndDatePicker,

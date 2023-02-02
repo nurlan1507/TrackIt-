@@ -21,11 +21,12 @@ class ProjectRepository:IProjectInterface {
                 "title" to project.title,
                 "description" to project.description,
                 "projectImg" to project.image,
-                "users" to project.members,
+                "members" to project.members,
                 "startDate" to project.startDate,
                 "endDate" to project.endDate,
                 "admins" to listOf(mAuth.currentUser?.uid)
             )
+            Log.d("LOSHARA", (project.endDate == project.startDate).toString())
             var res = projectCollection.add(mapOfData).await()
             project.id = res.id
             Log.d("newProjectId", res.id)
