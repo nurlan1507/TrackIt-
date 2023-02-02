@@ -16,4 +16,7 @@
 
         <!-- Customize your theme here. -->
     </style>
+    <style name="CircularProgress" parent="Theme.AppCompat.Light">
+        <item name="colorAccent">@color/blue_main</item>
+    </style>
 </resources>

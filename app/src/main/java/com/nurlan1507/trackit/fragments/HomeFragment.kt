@@ -1,9 +1,12 @@
 package com.nurlan1507.trackit.fragments
 
 import android.content.ClipData.Item
+import android.content.res.ColorStateList
+import android.graphics.PorterDuff
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import android.widget.ImageView
 import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -13,6 +16,9 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.progressindicator.CircularProgressIndicator
+import com.google.android.material.progressindicator.CircularProgressIndicatorSpec
+import com.google.android.material.progressindicator.IndeterminateDrawable
 import com.google.firebase.auth.FirebaseAuth
 import com.nurlan1507.trackit.MainActivity
 import com.nurlan1507.trackit.R
@@ -75,9 +81,10 @@ class HomeFragment : Fragment() {
             lifecycleOwner = viewLifecycleOwner
         }
 
-
         sharedProjectViewModel.getProjects(mAuth.currentUser?.uid.toString()) { list->
+            _binding.projectsListProgressBa.visibility = View.GONE
             val projectAdapter = ProjectAdapter(list ) { it, project ->
+
                 val popupMenu = PopupMenu(requireContext(), it)
                 popupMenu.menuInflater.inflate(R.menu.project_long_menu, popupMenu.menu)
                 popupMenu.setOnMenuItemClickListener {
@@ -101,6 +108,7 @@ class HomeFragment : Fragment() {
                 popupMenu.show()
             }
             val projectRecyclerView: RecyclerView = binding.projectsList
+            projectRecyclerView.addItemDecoration(GridItemDecoration())
             projectRecyclerView.adapter = projectAdapter
         }
 

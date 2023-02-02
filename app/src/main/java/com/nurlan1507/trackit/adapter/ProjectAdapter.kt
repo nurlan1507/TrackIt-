@@ -1,9 +1,13 @@
 package com.nurlan1507.trackit.adapter
 
+import android.app.Notification.Action
+import android.app.usage.UsageEvents.Event
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import androidx.constraintlayout.widget.ConstraintSet.Motion
 import androidx.recyclerview.widget.RecyclerView
 import com.nurlan1507.trackit.R
 import com.nurlan1507.trackit.data.Project
@@ -27,6 +31,8 @@ class ProjectAdapter(var projects:List<Project>, var onClickListener:(View,Proje
             binding.projectTitle.text = projects.get(position).title
             binding.cardProjectImage.setImageResource(projects.get(position).image.id)
         }
+
+
         holder.itemView.setOnLongClickListener{
             onClickListener(it,projects.get(position))
             true

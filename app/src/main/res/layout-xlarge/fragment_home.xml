@@ -28,19 +28,43 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     />
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/projects_list"
+                <ProgressBar
+                    android:id="@+id/projects_list_progress_ba"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="10dp"
-                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                    app:spanCount="2"
-                    app:layout_constraintTop_toBottomOf="@id/workflow_heading"
                     app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/workflow_heading"
+                    android:visibility="visible"
+                    android:theme="@style/CircularProgress"
+                    />
+                <TextView
+                    android:id="@+id/no_projects_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@id/projects_list_progress_ba"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:visibility="gone"
+                    android:text="You dont have any projects yet"
+                    />
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/projects_list"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    app:spanCount="2"
+                    android:scrollbars="horizontal"
+                    android:orientation="horizontal"
+                    android:background="@color/white"
+                    app:layout_constraintTop_toBottomOf="@id/no_projects_text"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                     tools:itemCount="6"
                     tools:listitem="@layout/card_project"
-                    />
+                    >
+
+                </androidx.recyclerview.widget.RecyclerView>
                 <TextView
                     android:id="@+id/notifications_header"
                     android:layout_width="match_parent"
