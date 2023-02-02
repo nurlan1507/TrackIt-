@@ -22,7 +22,7 @@ class ProjectViewModel:ViewModel() {
     private val projectRepository = ProjectRepo.projectRepo
 
     //list of projects
-    private var _projects:MutableLiveData<List<Project>> = MutableLiveData<List<Project>>()
+    var _projects:MutableLiveData<List<Project>> = MutableLiveData<List<Project>>()
     val projects:LiveData<List<Project>> = _projects
     //project object that is going to be created
     private var _project:MutableLiveData<Project> = MutableLiveData<Project>(Project())
@@ -82,7 +82,7 @@ class ProjectViewModel:ViewModel() {
         try{
             _project.value?.title = title
             _project.value?.description = description
-            _project.value?.admins = mutableListOf(adminUser)
+            _project.value?.admins = mutableListOf(adminUser.uid)
             listener()
         }catch (e:Exception){
             Log.d("Err", e.message.toString())
@@ -112,7 +112,7 @@ class ProjectViewModel:ViewModel() {
             if(_project.value != null){
                 var result = projectRepository.createProject(_project.value!!)
                 if(result is ApiSuccess){
-                    projectRepository.addAdminJunction((result.list as Project).admins[0].uid, (result.list as Project).id)
+                    projectRepository.addAdminJunction((result.list as Project).admins[0], (result.list as Project).id)
                     listener(result.list as Project)
                 }else{
 
@@ -123,11 +123,12 @@ class ProjectViewModel:ViewModel() {
         }
     }
 
-    fun getProjects(userId:String){
+    fun getProjects(userId:String, listener: (list:List<Project>) -> Unit){
         viewModelScope.launch {
-            val projectRes = projectRepository.getProject(userId)
+            val projectRes = projectRepository.getProjects(userId)
             if(projectRes is ApiSuccess){
-                _projects.value = (projectRes.list as List<Project>)
+                _projects.value = projectRes.list as List<Project>
+                listener(_projects.value!!)
             }else if(projectRes is ApiFailure){
                 Log.d("getProjects", projectRes.e.message.toString())
             }

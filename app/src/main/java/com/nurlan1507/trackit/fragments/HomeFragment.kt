@@ -37,11 +37,11 @@ class HomeFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mAuth = FirebaseAuth.getInstance()
+        val currentUserId = mAuth.currentUser?.uid.toString()
         setHasOptionsMenu(true)
         (activity as AppCompatActivity).supportActionBar?.show()
 
-        userViewModel.getFriends(mAuth.currentUser?.uid.toString())
-
+        userViewModel.getFriends(currentUserId)
         Toast.makeText(requireContext(), userViewModel.user.value?.email.toString(),Toast.LENGTH_SHORT).show()
     }
 
@@ -64,6 +64,8 @@ class HomeFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
+
         super.onViewCreated(view, savedInstanceState)
         (activity as MainActivity).enableDrawer()
 
@@ -74,31 +76,47 @@ class HomeFragment : Fragment() {
         }
 
 
-
-
-        val projectRecyclerView:RecyclerView = binding.projectsList
-        projectRecyclerView.addItemDecoration(GridItemDecoration())
-        projectRecyclerView.adapter = ProjectAdapter(sharedProjectViewModel.projects.value) {
-            it,project->
-            val popupMenu = PopupMenu(requireContext(),it)
-            popupMenu.menuInflater.inflate(R.menu.project_long_menu,popupMenu.menu)
-            popupMenu.setOnMenuItemClickListener {
-                when(it.itemId){
-                    R.id.leave_project ->
-                        Toast.makeText(requireContext(),"Leave project", Toast.LENGTH_SHORT).show()
-                    R.id.invitation_link ->
-                        Toast.makeText(requireContext(),"invitation link", Toast.LENGTH_LONG).show()
-                    R.id.add_to_favorites ->
-                        Toast.makeText(requireContext(),"addtofavoriites", Toast.LENGTH_SHORT).show()
+        sharedProjectViewModel.getProjects(mAuth.currentUser?.uid.toString()) { list->
+            val projectAdapter = ProjectAdapter(list ) { it, project ->
+                val popupMenu = PopupMenu(requireContext(), it)
+                popupMenu.menuInflater.inflate(R.menu.project_long_menu, popupMenu.menu)
+                popupMenu.setOnMenuItemClickListener {
+                    when (it.itemId) {
+                        R.id.leave_project ->
+                            Toast.makeText(requireContext(), "Leave project", Toast.LENGTH_SHORT)
+                                .show()
+                        R.id.invitation_link ->
+                            Toast.makeText(requireContext(), "invitation link", Toast.LENGTH_LONG)
+                                .show()
+                        R.id.add_to_favorites ->
+                            Toast.makeText(requireContext(), "addtofavoriites", Toast.LENGTH_SHORT)
+                                .show()
+                    }
+                    true
                 }
-                true
+                if (project.title == "TrackIt!") {
+                    popupMenu.menu.removeItem(R.id.add_to_favorites)
+                    popupMenu.menu.add(1, R.id.add_to_favorites, 1, "remove from favorites")
+                }
+                popupMenu.show()
             }
-            if(project.title == "TrackIt!"){
-                popupMenu.menu.removeItem(R.id.add_to_favorites)
-                popupMenu.menu.add(1, R.id.add_to_favorites, 1  ,"remove from favorites")
-            }
-            popupMenu.show()
+            val projectRecyclerView: RecyclerView = binding.projectsList
+            projectRecyclerView.adapter = projectAdapter
         }
+
+//
+//        sharedProjectViewModel.projects.observe(this.viewLifecycleOwner){list->
+//            projectAdapter.setData(list)
+//            projectAdapter.notifyDataSetChanged()
+//        }
+//        projectRecyclerView.addItemDecoration(GridItemDecoration())
+
+
+
+
+
+
+
 
         val notificationRecyclerView:RecyclerView = binding.notificationList
         val itemDecor = DividerItemDecoration(requireContext(), RecyclerView.VERTICAL)
@@ -111,7 +129,6 @@ class HomeFragment : Fragment() {
                     notificationsViewModel.getNotification(notificaiton.notificationId)
                     findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToUserProfile(userId=notificaiton.sender.uid))
                 }
-
         }
         notificationRecyclerView.adapter = notificationAdapter
         notificationsViewModel.notifications.observe(this.viewLifecycleOwner){ list ->

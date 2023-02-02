@@ -57,20 +57,24 @@ class ProjectRepository:IProjectInterface {
 
 
     override suspend fun getProject(id: String): ApiResult {
-        TODO("Not yet implemented")
+        return ApiSuccess()
     }
 
     override suspend fun getProjects(userId: String): ApiResult {
-        return try{
+        var result:ApiResult
+        try{
             val bridgeTableDocs =  junctionCollection.whereEqualTo("userId", userId).get().await()
             val projects = mutableListOf<Project>()
             for(document in bridgeTableDocs.documents){
-                val project = projectCollection.document(document.data?.get("projectId").toString()).get().await()
+                val project = projectCollection.document(document.get("projectId") as String).get().await()
                 projects.add(project.toObject(Project::class.java)!!)
             }
-            ApiSuccess(projects)
+            result = ApiSuccess(projects)
+            return result
         }catch (e:Exception){
-            ApiFailure(e)
+            Log.d("EEE",e.message.toString())
+            result = ApiFailure(e)
+            return result
         }
     }
 }
