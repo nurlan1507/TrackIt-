@@ -176,14 +176,26 @@
                         android:background="@color/light_gray"
                         />
                 </LinearLayout>
-
-
-
-
             </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
+        </com.google.android.material.card.MaterialCardView>
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/project_tasks_card"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:cardElevation="1dp"
+            app:cardCornerRadius="10dp"
+            app:strokeWidth="1dp"
+            app:strokeColor="@color/middle_gray"
+            app:cardBackgroundColor="@color/project_background">
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/task_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:listitem="@layout/item_task"
+                tools:itemCount="10"
+                android:orientation="vertical"
+                />
         </com.google.android.material.card.MaterialCardView>
     </LinearLayout>
 </layout>

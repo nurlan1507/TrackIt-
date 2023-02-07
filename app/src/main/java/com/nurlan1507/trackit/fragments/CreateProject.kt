@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.view.*
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -24,6 +25,7 @@ import com.nurlan1507.trackit.data.projectBoardBackgrounds
 import com.nurlan1507.trackit.databinding.FragmentCreateProjectBinding
 import com.nurlan1507.trackit.viewmodels.ProjectViewModel
 import com.nurlan1507.trackit.viewmodels.UserViewModel
+import java.sql.Timestamp
 import java.util.*
 
 class CreateProject : Fragment() {
@@ -70,28 +72,34 @@ class CreateProject : Fragment() {
             myCalendarStartDate.set(Calendar.MONTH, month)
             myCalendarStartDate.set(Calendar.DAY_OF_MONTH, day)
             sharedProjectViewModel.setStartDate(myCalendarStartDate.time.toInstant().toEpochMilli())
+            Toast.makeText(requireContext(),myCalendarStartDate.time.toInstant().toEpochMilli().toString(), Toast.LENGTH_LONG).show()
             startDateBtn.text = sharedProjectViewModel.startDate()
         }
+
+
         val startDateDialog = DatePickerDialog(requireContext(), myStartDatePicker,
             myCalendarStartDate.get(Calendar.YEAR),
             myCalendarStartDate.get(Calendar.MONTH),
             myCalendarStartDate.get(Calendar.DAY_OF_MONTH)
+
         )
-
-
         val myCalendarEndDate = Calendar.getInstance()
         val myEndDatePicker = DatePickerDialog.OnDateSetListener{ datePicker, year, month, day ->
             myCalendarEndDate.set(Calendar.YEAR,year)
             myCalendarEndDate.set(Calendar.MONTH,month)
             myCalendarEndDate.set(Calendar.DAY_OF_MONTH,day)
             sharedProjectViewModel.setEndDate(myCalendarEndDate.time.toInstant().toEpochMilli())
+            Toast.makeText(requireContext(),myCalendarEndDate.time.toInstant().toEpochMilli().toString(), Toast.LENGTH_LONG).show()
             endDateBtn.text = sharedProjectViewModel.endDate()
+
         }
         val endDateDialog = DatePickerDialog(requireContext(), myEndDatePicker,
             myCalendarEndDate.get(Calendar.YEAR),
             myCalendarEndDate.get(Calendar.MONTH),
             myCalendarEndDate.get(Calendar.DAY_OF_MONTH)
+
         )
+
         startDateBtn = _binding.startDateBtn
         endDateBtn = _binding.endDateBtn
         startDateBtn.setOnClickListener {
@@ -123,6 +131,9 @@ class CreateProject : Fragment() {
                 return@setOnClickListener
             }
             sharedProjectViewModel.setProjectData(_binding.inputProjectName.text.toString(), _binding.descriptionInput.text.toString(), userViewModel.user.value!!){
+                Toast.makeText(requireContext(),sharedProjectViewModel.endDate(),Toast.LENGTH_LONG).show()
+                Toast.makeText(requireContext(),sharedProjectViewModel.startDate(),Toast.LENGTH_LONG).show()
+
                 findNavController().navigate(R.id.action_createProject_to_friendListFragment)
                 true
             }

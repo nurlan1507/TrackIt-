@@ -119,6 +119,7 @@ class AuthRepository:IAuthRepository {
         //check if user with that id exists
         var user:User
         var result:AuthResult? = null
+        Log.d("ILAUNCHED",account.email.toString())
         try{
             val userDB = db.document(uid).get().await()
             val userInstance = userDB.toObject(User::class.java)
@@ -128,6 +129,7 @@ class AuthRepository:IAuthRepository {
             }
             result = Success(user)
         }catch (e:Exception){
+            Log.d("EEE",e.message.toString())
             result = Failure(e.message!!)
         }
         return result

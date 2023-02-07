@@ -12,6 +12,7 @@ import com.nurlan1507.trackit.helpers.ApiFailure
 import com.nurlan1507.trackit.helpers.ApiSuccess
 import com.nurlan1507.trackit.repositories.ProjectRepo
 import kotlinx.coroutines.launch
+import java.sql.Timestamp
 import java.text.SimpleDateFormat
 import java.time.*
 import java.time.format.DateTimeFormatter
@@ -83,8 +84,8 @@ class ProjectViewModel:ViewModel() {
             _project.value?.title = title
             _project.value?.description = description
             _project.value?.admins = mutableListOf(adminUser.uid)
-            _project.value!!.endDate = endDate.value!!
-            _project.value!!.startDate = _startDate.value!!
+            _project.value?.endDate = _endDate.value!!
+            _project.value?.startDate = _startDate.value!!
             listener()
         }catch (e:Exception){
             Log.d("Err", e.message.toString())
@@ -112,7 +113,8 @@ class ProjectViewModel:ViewModel() {
     fun createProject(listener: (project:Project) -> Unit){
         viewModelScope.launch {
             if(_project.value != null){
-
+                Log.d("StartDateLOX", _project.value!!.startDate.toString())
+                Log.d("EndDateLOX",_project.value!!.endDate.toString())
                 var result = projectRepository.createProject(_project.value!!)
                 if(result is ApiSuccess){
                     projectRepository.addAdminJunction((result.list as Project).admins[0], (result.list as Project).id)

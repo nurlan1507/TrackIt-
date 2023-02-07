@@ -6,7 +6,7 @@ import com.nurlan1507.trackit.R
 
 class Project(
     var id:String, var title:String, var description:String, var image:ProjectBackGround,var members:MutableList<String>,  var startDate:Long, var endDate:Long, var admins: MutableList<String>) {
-    constructor(): this("id", "dummmy","DUMMY", ProjectBackGround(), mutableListOf(), System.currentTimeMillis(),System.currentTimeMillis(), mutableListOf())
+    constructor(): this("id", "dummmy","DUMMY", ProjectBackGround(), mutableListOf(), System.currentTimeMillis(),2, mutableListOf())
 
     fun <T :Project?> withId(id:String):T{
         this.id = id

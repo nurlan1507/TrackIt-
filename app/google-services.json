@@ -14,11 +14,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "1022739792697-uag13b518erolsfsddur4nfbcd104p8g.apps.googleusercontent.com",
+          "client_id": "1022739792697-55mh3h25igbab8342d9se0d257fot433.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.nurlan1507.trackit",
-            "certificate_hash": "5d12c72ecc2c79cbcd4f4553b745f9ecd881de61"
+            "certificate_hash": "28f74e606f45149ce03dc5ff37778113119ead12"
           }
         },
         {
