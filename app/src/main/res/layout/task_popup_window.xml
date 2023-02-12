@@ -6,7 +6,6 @@
     android:id="@+id/popup_window_background"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
     >
 
 
@@ -25,80 +24,130 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent">
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/popup_window_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_margin="2dp"
-            app:cardBackgroundColor="@android:color/white"
-            app:cardCornerRadius="3dp"
-            app:cardElevation="0dp"
-            app:cardMaxElevation="0dp"
-            app:cardPreventCornerOverlap="false">
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/popup_window_background_container"
-                android:layout_width="250dp"
-                android:minHeight="170dp"
-                android:background="#bc214b"
+            <LinearLayout
+                android:id="@+id/lin"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true">
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/popup_window_text"
+                android:orientation="vertical"
+                >
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/project_name_text_input_layout"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginBottom="8dp"
-                    android:text="Text"
-                    android:gravity="center"
-                    android:textAlignment="center"
-                    android:textStyle="bold"
-                    android:textColor="#FFFFFF"
-                    android:textSize="12sp"
-                    app:layout_constraintBottom_toTopOf="@+id/popup_window_button"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Project Name"
+                    style="@style/Widget.Design.TextInputLayout"
+                    app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/popup_window_title" />
+                    app:layout_constraintEnd_toEndOf="parent"
+                    >
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/input_project_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="text"
+                        android:gravity="top"
+                        android:drawableStart="@drawable/ic_baseline_drive_file_rename_outline_24"
+                        android:drawablePadding="10dp"
+                        />
+                </com.google.android.material.textfield.TextInputLayout>
 
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/popup_window_title"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/description_text_input_layout"
                     android:layout_width="match_parent"
-                    android:layout_height="45dp"
-                    app:autoSizeTextType="uniform"
-                    app:autoSizeMaxTextSize="24dp"
-                    android:background="#9E1C40"
-                    android:text="Title"
-                    android:gravity="center"
-                    android:textAlignment="center"
-                    android:textColor="#FFFFFF"
-                    android:textSize="20sp"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Description (Optional)"
+                    android:layout_marginTop="15dp"
+                    style="@style/Widget.Design.TextInputLayout"
+                    app:boxCornerRadiusBottomEnd="25dp"
+                    app:boxCornerRadiusBottomStart="25dp"
+                    app:boxCornerRadiusTopEnd="25dp"
+                    app:boxCornerRadiusTopStart="25dp"
+                    app:layout_constraintTop_toBottomOf="@id/project_name_text_input_layout"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintEnd_toEndOf="parent"
+                    >
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/description_input"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textMultiLine"
+                        android:drawableStart="@drawable/ic_baseline_drive_file_rename_outline_24"
+                        />
+                </com.google.android.material.textfield.TextInputLayout>
 
+
+                <LinearLayout
+                    android:id="@+id/date_linear_layout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:divider="@drawable/linear_layout_dividor_create_project"
+                    android:showDividers="middle"
+                    android:layout_marginTop="15dp"
+                    app:layout_constraintTop_toBottomOf="@id/description_text_input_layout"
+                    app:layout_constraintStart_toStartOf="parent"
+                    >
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_baseline_date_range_24"
+                        android:contentDescription="Date icon"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="2dp"
+                        />
+                    <Button
+                        android:id="@+id/start_date_btn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="10dp"
+                        style="?attr/materialButtonOutlinedStyle"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"
+                        android:text="@{viewModel.startDate()}"
+                        />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="-"
+                        />
+                    <Button
+                        android:id="@+id/end_date_btn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="10dp"
+                        style="?attr/materialButtonOutlinedStyle"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"
+                        android:text="@{viewModel.endDate()}"
+                        />
+                </LinearLayout>
+                <TextView
+                    android:id="@+id/date_error"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@id/date_linear_layout"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    style="@style/text_sm_normal"
+                    android:textColor="@color/error"
+                    />
 
                 <Button
-                    android:id="@+id/popup_window_button"
-                    style="?android:attr/borderlessButtonStyle"
+                    android:id="@+id/create_project_btn"
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:background="#851635"
-                    android:text="ok"
-                    android:textAllCaps="false"
-                    android:textColor="#FFFFFF"
-                    android:textSize="20sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:layout_height="wrap_content"
+                    android:text="Create Project"
+                    style="?attr/materialButtonStyle"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent" />
+                    app:layout_constraintTop_toBottomOf="@id/date_error"
+                    />
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </androidx.cardview.widget.CardView>
+            </LinearLayout>
+
+
+
     </androidx.cardview.widget.CardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

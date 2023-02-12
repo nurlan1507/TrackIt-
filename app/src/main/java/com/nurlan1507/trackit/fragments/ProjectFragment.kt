@@ -91,7 +91,7 @@ class ProjectFragment : Fragment() {
 //        startActivity(popupIntent)
         val popupView = layoutInflater.inflate(R.layout.task_popup_window, null)
         val popupBackground = popupView.findViewById<ConstraintLayout>(R.id.popup_window_background)
-        val popupWindowView = popupView.findViewById<CardView>(R.id.popup_window_view)
+        val popupWindowView = popupView.findViewById<CardView>(R.id.popup_window_view_with_border)
         val popupWindow = PopupWindow(popupView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, true)
 
 
