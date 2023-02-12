@@ -33,6 +33,10 @@
             app:destination="@id/userProfile" />
         <action
             android:id="@+id/action_homeFragment_to_projectFragment"
+            app:enterAnim="@anim/from_left"
+            app:exitAnim="@anim/to_right"
+            app:popEnterAnim="@anim/from_right"
+            app:popExitAnim="@anim/to_left"
             app:destination="@id/projectFragment" />
     </fragment>
     <fragment

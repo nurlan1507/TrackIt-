@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
@@ -46,11 +47,19 @@ class HomeFragment : Fragment() {
         val currentUserId = mAuth.currentUser?.uid.toString()
         setHasOptionsMenu(true)
         (activity as AppCompatActivity).supportActionBar?.show()
-
         userViewModel.getFriends(currentUserId)
         Toast.makeText(requireContext(), userViewModel.user.value?.email.toString(),Toast.LENGTH_SHORT).show()
     }
 
+    override fun onPause() {
+        super.onPause()
+        (activity as MainActivity).disableDrawer()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        (activity as MainActivity).enableDrawer()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -165,8 +174,10 @@ class HomeFragment : Fragment() {
         (activity as MainActivity).disableDrawer()
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_toolbar,menu)
+        Log.d("MENUINFLATER","MENUFFF")
         super.onCreateOptionsMenu(menu, inflater)
     }
 
