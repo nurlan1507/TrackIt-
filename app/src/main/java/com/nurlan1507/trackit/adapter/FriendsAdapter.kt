@@ -22,7 +22,7 @@ class FriendsAdapter(val ctx:Context, private val itemList:ArrayList<FriendsAdap
     inner class ViewHolderFriend(val binding: FriendListItemBinding):RecyclerView.ViewHolder(binding.root){
         @SuppressLint("ClickableViewAccessibility")
         fun bind(friend:User,position: Int){
-            binding.email.text = friend.email
+            binding.emailF.text = friend.email
             binding.username.text = friend.username
             binding.root.setOnClickListener{view->
                 onItemTouch(view,friend)

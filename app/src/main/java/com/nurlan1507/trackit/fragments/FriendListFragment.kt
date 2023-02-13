@@ -104,11 +104,11 @@ class FriendListFragment : Fragment() {
         val friendsAdapter = FriendsAdapter(requireContext(),itemList){view,friend ->
             if(view.findViewById<CheckBox>(R.id.user_selected).isChecked){
                 view.findViewById<CheckBox>(R.id.user_selected).isChecked = false
-                projectViewModel.removeUser(friend.uid)
+                projectViewModel.removeUser(friend)
                 true
             }else if(!view.findViewById<CheckBox>(R.id.user_selected).isChecked){
                 view.findViewById<CheckBox>(R.id.user_selected).isChecked = true
-                projectViewModel.addUser(friend.uid)
+                projectViewModel.addUser(friend)
                 true
             }
             else{
@@ -131,8 +131,12 @@ class FriendListFragment : Fragment() {
 
             projectViewModel.createProject(){
                 val workManager = WorkManager.getInstance(requireContext())
+                var userList: MutableList<String> = mutableListOf()
+                it.members.forEachIndexed { index, user ->
+                    userList.add(user.uid)
+                }
                 val request = OneTimeWorkRequestBuilder<ProjectWorker>()
-                    .setInputData(workDataOf("memberList" to it.members.toTypedArray(),"projectId" to it.id))
+                    .setInputData(workDataOf("memberList" to userList.toTypedArray(),"projectId" to it.id))
                     .build()
                 workManager.enqueue(request)
                 createProjectBtn.icon = icon

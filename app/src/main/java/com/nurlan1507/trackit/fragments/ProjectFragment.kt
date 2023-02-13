@@ -10,7 +10,12 @@ import android.view.*
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.view.animation.DecelerateInterpolator
+import android.widget.Adapter
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.PopupWindow
+import android.widget.Spinner
+import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.graphics.ColorUtils
@@ -22,8 +27,10 @@ import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.nurlan1507.trackit.MainActivity
 import com.nurlan1507.trackit.R
+import com.nurlan1507.trackit.adapter.MembersAdapter
 import com.nurlan1507.trackit.adapter.TaskAdapter
 import com.nurlan1507.trackit.data.Task
+import com.nurlan1507.trackit.data.User
 import com.nurlan1507.trackit.databinding.FragmentProjectBinding
 import com.nurlan1507.trackit.viewmodels.ProjectViewModel
 
@@ -37,9 +44,7 @@ class ProjectFragment : Fragment() {
         super.onCreate(savedInstanceState)
         (activity as MainActivity).disableDrawer()
         setHasOptionsMenu(true)
-
     }
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -106,12 +111,30 @@ class ProjectFragment : Fragment() {
 
 
         popupWindow.showAtLocation(binding.root, Gravity.CENTER, 0 ,0)
-
         popupWindowView.animate().alpha(1f).setDuration(500).setInterpolator(
             DecelerateInterpolator()
         ).start()
         colorAnimation.start()
+        val spinner = popupView.findViewById<Spinner>(R.id.spinner)
+        var users = listOf(User(), User())
+        val userAdapter = MembersAdapter(requireContext(),sharedProjectViewModel.project.value!!.members)
+        spinner.adapter = userAdapter
+        spinner.onItemSelectedListener = object :AdapterView.OnItemSelectedListener{
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                p3: Long
+            ) {
+                Toast.makeText(requireContext(),"${users.get(position).email}", Toast.LENGTH_LONG).show()
+            }
 
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+                TODO("Not yet implemented")
+            }
+
+        }
+        spinner.prompt = "Promtp"
         fun onPopupClose() {
             val exitAnimation = AnimationUtils.loadAnimation(requireContext(),R.anim.popup_exit)
             exitAnimation.setAnimationListener(object : Animation.AnimationListener {

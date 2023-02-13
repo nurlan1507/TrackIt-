@@ -9,4 +9,5 @@ interface IProjectInterface {
     suspend fun getProjects(userId:String):ApiResult
     suspend fun addAdminJunction(userId:String, projectId:String):ApiResult
     suspend fun addUserJunction(userId: String, projectId: String):ApiResult
+    suspend fun getProjectMembers(projectId:String):ApiResult
 }

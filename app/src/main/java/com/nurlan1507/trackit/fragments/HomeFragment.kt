@@ -93,7 +93,9 @@ class HomeFragment : Fragment() {
         sharedProjectViewModel.getProjects(mAuth.currentUser?.uid.toString() ) { list->
             _binding.projectsListProgressBa.visibility = View.GONE
             val projectAdapter = ProjectAdapter(list, onClickListener ={ view, project ->
+                Toast.makeText(requireContext(),"SSS",Toast.LENGTH_LONG).show()
                 sharedProjectViewModel.setProject(project)
+//                Toast.makeText(requireContext(), project.members[0].toString(), Toast.LENGTH_LONG).show(
                 val action = HomeFragmentDirections.actionHomeFragmentToProjectFragment(project.id,project.title)
                 findNavController().navigate(action)
             },
@@ -125,19 +127,6 @@ class HomeFragment : Fragment() {
             projectRecyclerView.addItemDecoration(GridItemDecoration())
             projectRecyclerView.adapter = projectAdapter
         }
-
-//
-//        sharedProjectViewModel.projects.observe(this.viewLifecycleOwner){list->
-//            projectAdapter.setData(list)
-//            projectAdapter.notifyDataSetChanged()
-//        }
-//        projectRecyclerView.addItemDecoration(GridItemDecoration())
-
-
-
-
-
-
 
 
         val notificationRecyclerView:RecyclerView = binding.notificationList

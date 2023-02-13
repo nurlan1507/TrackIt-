@@ -93,7 +93,7 @@ class ProjectViewModel:ViewModel() {
 
 
     }
-    fun addUser(userId: String):Boolean{
+    fun addUser(userId: User):Boolean{
         try{
             _project.value?.members?.add(userId)
             return true
@@ -101,12 +101,25 @@ class ProjectViewModel:ViewModel() {
             return false
         }
     }
-    fun removeUser(userId: String):Boolean{
+    fun removeUser(userId: User):Boolean{
         try{
             _project.value?.members?.remove(userId)
             return true
         }catch (e:Exception) {
             return false
+        }
+    }
+
+    fun getMembers(){
+        viewModelScope.launch {
+            Log.d("prId", project.value?.id.toString())
+            var res = projectRepository.getProjectMembers(project.value?.id.toString())
+            if(res is ApiSuccess){
+                Log.d("SUCC?","SUCCESS")
+                project.value?.members = res.list as MutableList<User>
+            }else if(res is ApiFailure){
+                Log.d("ProjectViewModel", res.e.message.toString())
+            }
         }
     }
 
@@ -141,9 +154,10 @@ class ProjectViewModel:ViewModel() {
     }
 
     fun setProject(project:Project){
+        Log.d("ASS","ASS")
         _project.value = project
         setEndDate(project.endDate)
         setStartDate(project.startDate)
-
+        getMembers()
     }
 }

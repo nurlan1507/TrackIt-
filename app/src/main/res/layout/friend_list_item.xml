@@ -40,7 +40,7 @@
             style="@style/text_sm_normal"
             />
         <TextView
-            android:id="@+id/email"
+            android:id="@+id/email_f"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             tools:text="nurlanbaitassov@mail.ru"
