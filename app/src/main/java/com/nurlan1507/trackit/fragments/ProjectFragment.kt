@@ -1,21 +1,18 @@
 package com.nurlan1507.trackit.fragments
 
 import android.R.attr.animation
+import android.R.attr.title
 import android.animation.ArgbEvaluator
 import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.view.animation.DecelerateInterpolator
-import android.widget.Adapter
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.PopupWindow
-import android.widget.Spinner
-import android.widget.Toast
+import android.widget.*
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.graphics.ColorUtils
@@ -25,6 +22,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.work.Worker
 import androidx.work.WorkerParameters
+import com.google.android.material.textfield.TextInputEditText
 import com.nurlan1507.trackit.MainActivity
 import com.nurlan1507.trackit.R
 import com.nurlan1507.trackit.adapter.MembersAdapter
@@ -33,12 +31,16 @@ import com.nurlan1507.trackit.data.Task
 import com.nurlan1507.trackit.data.User
 import com.nurlan1507.trackit.databinding.FragmentProjectBinding
 import com.nurlan1507.trackit.viewmodels.ProjectViewModel
+import com.nurlan1507.trackit.viewmodels.TaskViewModel
+import org.w3c.dom.Text
 
 
 class ProjectFragment : Fragment() {
     private lateinit var  binding: FragmentProjectBinding
     private val sharedProjectViewModel:ProjectViewModel by activityViewModels()
+    private val sharedTaskViewModel:TaskViewModel by activityViewModels()
     private lateinit var taskRecyclerView:RecyclerView
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -92,13 +94,27 @@ class ProjectFragment : Fragment() {
 
 
     private fun createPopupWindow(){
-//       val popupIntent = Intent(requireContext(),TaskPopupWindow::class.java)
-//        startActivity(popupIntent)
+        sharedTaskViewModel.initiateTask()
+
         val popupView = layoutInflater.inflate(R.layout.task_popup_window, null)
         val popupBackground = popupView.findViewById<ConstraintLayout>(R.id.popup_window_background)
         val popupWindowView = popupView.findViewById<CardView>(R.id.popup_window_view_with_border)
         val popupWindow = PopupWindow(popupView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, true)
 
+        //task data
+        val titleView: TextInputEditText = popupView.findViewById<TextInputEditText>(R.id.input_task_name)
+        val startDateBtn: Button = popupView.findViewById(R.id.task_start_date_btn)
+        val endDateBtn:Button = popupView.findViewById(R.id.task_end_date_btn)
+        val createButton:Button = popupView.findViewById(R.id.create_task_btn)
+        val memberList: MutableList<User> = mutableListOf()
+
+        createButton.setOnClickListener {
+            if(titleView.text?.isEmpty() == true){
+                titleView.error = "Title can not be empty"
+                titleView.requestFocus()
+            }
+            sharedTaskViewModel.createTask(titleView.text.toString(),"description", memberList)
+        }
 
         val alpha = 100 //between 0-255
         val alphaColor = ColorUtils.setAlphaComponent(Color.parseColor("#000000"), alpha)
@@ -108,16 +124,24 @@ class ProjectFragment : Fragment() {
             popupBackground.setBackgroundColor(animator.animatedValue as Int)
         }
 
-
-
         popupWindow.showAtLocation(binding.root, Gravity.CENTER, 0 ,0)
         popupWindowView.animate().alpha(1f).setDuration(500).setInterpolator(
             DecelerateInterpolator()
         ).start()
         colorAnimation.start()
+
+
         val spinner = popupView.findViewById<Spinner>(R.id.spinner)
-        var users = listOf(User(), User())
-        val userAdapter = MembersAdapter(requireContext(),sharedProjectViewModel.project.value!!.members)
+        val userAdapter = MembersAdapter(requireContext(),sharedProjectViewModel.project.value!!.members){view->
+            val checkBox = view.findViewById<CheckBox>(R.id.member_selected)
+            if(!checkBox.isChecked){
+                checkBox.isChecked=true
+                false
+            }else{
+                checkBox.isChecked = false
+                true
+            }
+        }
         spinner.adapter = userAdapter
         spinner.onItemSelectedListener = object :AdapterView.OnItemSelectedListener{
             override fun onItemSelected(
@@ -126,7 +150,12 @@ class ProjectFragment : Fragment() {
                 position: Int,
                 p3: Long
             ) {
-                Toast.makeText(requireContext(),"${users.get(position).email}", Toast.LENGTH_LONG).show()
+                val user = spinner.adapter.getItem(position) as User
+                if(memberList.contains(user)){
+                    memberList.remove(user)
+                }else{
+                    memberList.add(user)
+                }
             }
 
             override fun onNothingSelected(p0: AdapterView<*>?) {
@@ -134,7 +163,10 @@ class ProjectFragment : Fragment() {
             }
 
         }
-        spinner.prompt = "Promtp"
+
+
+
+//        spinner.prompt = "Promtp"
         fun onPopupClose() {
             val exitAnimation = AnimationUtils.loadAnimation(requireContext(),R.anim.popup_exit)
             exitAnimation.setAnimationListener(object : Animation.AnimationListener {

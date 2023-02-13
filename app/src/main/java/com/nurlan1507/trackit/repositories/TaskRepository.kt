@@ -10,6 +10,7 @@ import kotlinx.coroutines.tasks.await
 
 class TaskRepository:ITaskRepository {
     private val db = FirebaseFirestore.getInstance()
+    private val userTaskJunctionCollection = FirebaseFirestore.getInstance().collection("")
     override suspend fun createTask(projectId:String, task: Task): ApiResult {
         return try{
             val taskMap = mapOf<String,Any>(
@@ -17,6 +18,7 @@ class TaskRepository:ITaskRepository {
                 "description" to task.description,
                 "startDate" to task.startDate,
                 "endDate" to task.endDate,
+
             )
             db.collection("projects").document(projectId).collection("tasks").add(taskMap).await()
             //add users with worker

@@ -6,13 +6,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.LayoutParams
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.bumptech.glide.Glide
+import com.google.api.Distribution.BucketOptions.Linear
 import com.nurlan1507.trackit.R
 import com.nurlan1507.trackit.data.User
 import com.nurlan1507.trackit.databinding.FriendListItemBinding
+import com.nurlan1507.trackit.databinding.MemberListItemBinding
 import org.w3c.dom.Text
 
 //class MembersAdapter(val members:List<User>):RecyclerView.Adapter<MembersAdapter.MemberViewHolder>() {
@@ -37,39 +41,46 @@ import org.w3c.dom.Text
 //    }
 //}
 @SuppressLint("ResourceType")
-class MembersAdapter(val ctx: Context, var members:List<User>):ArrayAdapter<User>(ctx,android.R.layout.simple_spinner_item,members){
-    inner class MemberViewHolder(var binding: FriendListItemBinding):RecyclerView.ViewHolder(binding.root){
+class MembersAdapter(val ctx: Context, var members:List<User>, val onClickListener:(view:View)->Boolean):ArrayAdapter<User>(ctx,android.R.layout.simple_spinner_item,members){
+    val pickedItems:MutableList<User> = mutableListOf()
+    inner class MemberViewHolder(var binding: MemberListItemBinding):RecyclerView.ViewHolder(binding.root){
         fun bind(member:User){
-            var imageView = binding.userAvatar
-            binding.emailF.text = member.email
-            binding.username.text = member.username
+            var imageView = binding.memberAvatar
+            if(pickedItems.contains(member)){
+                binding.memberSelected.isChecked = true
+            }
+            binding.memberEmail.text = member.email
+            binding.memberUsername.text = member.username
             Glide.with(context).load(member.avatarUrl).into(imageView)
+            binding.root.setOnClickListener {
+                val isIn = onClickListener(it)
+                if(isIn==false){
+                    pickedItems.add(member)
+                }else{
+                    pickedItems.remove(member)
+                }
+            }
         }
     }
 
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val user = members.get(position)
-//        val viewHolder: ViewHolder
-//
-        val view = TextView(context)
-        view.text=user.email
-//        // Lookup view for data population
-//        val email = view.findViewById<TextView>(R.id.email_f)
-//        val username = view.findViewById<TextView>(R.id.username)
-//
-//        // Populate the data into the template view using the data object
-//        email.text = user.email
-//        username.text = user.username
-//
-//        // Return the completed view to render on screen
-        return view
+
+        val textView = TextView(context)
+        textView.text = "Select a user"
+        return textView
     }
 
     override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
-        val binding = FriendListItemBinding.inflate(LayoutInflater.from(context), null,false)
+        val binding =MemberListItemBinding.inflate(LayoutInflater.from(context), null,false)
         val viewHolder = MemberViewHolder(binding)
         viewHolder.bind(members.get(position))
         return viewHolder.itemView
+    }
+
+    override fun getItem(position: Int): User? {
+        notifyDataSetChanged()
+        return super.getItem(position)
     }
 }
