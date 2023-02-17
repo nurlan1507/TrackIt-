@@ -1,21 +1,28 @@
 package com.nurlan1507.trackit.fragments
 
-import android.R.attr.animation
-import android.R.attr.title
+import android.R.attr.*
 import android.animation.ArgbEvaluator
 import android.animation.ValueAnimator
+import android.app.AlertDialog
+import android.app.DatePickerDialog
+import android.app.TimePickerDialog
 import android.content.Context
+import android.content.DialogInterface
 import android.graphics.Color
+import android.net.IpSecManager.SpiUnavailableException
 import android.os.Bundle
 import android.util.Log
+import android.util.TypedValue
 import android.view.*
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.view.animation.DecelerateInterpolator
 import android.widget.*
+import android.widget.AdapterView.OnItemSelectedListener
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.graphics.ColorUtils
+import androidx.core.view.setPadding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -33,6 +40,7 @@ import com.nurlan1507.trackit.databinding.FragmentProjectBinding
 import com.nurlan1507.trackit.viewmodels.ProjectViewModel
 import com.nurlan1507.trackit.viewmodels.TaskViewModel
 import org.w3c.dom.Text
+import java.util.*
 
 
 class ProjectFragment : Fragment() {
@@ -115,6 +123,9 @@ class ProjectFragment : Fragment() {
             }
             sharedTaskViewModel.createTask(titleView.text.toString(),"description", memberList)
         }
+        startDateBtn.setOnClickListener {
+            startDatePickerDialog()
+        }
 
         val alpha = 100 //between 0-255
         val alphaColor = ColorUtils.setAlphaComponent(Color.parseColor("#000000"), alpha)
@@ -162,6 +173,8 @@ class ProjectFragment : Fragment() {
                 TODO("Not yet implemented")
             }
 
+
+
         }
 
 
@@ -188,8 +201,107 @@ class ProjectFragment : Fragment() {
             onPopupClose()
         }
 
+    }
+
+    private fun startDatePickerDialog() {
+        val positiveButtonClick = { dialog: DialogInterface, which: Int ->
+            Toast.makeText(requireContext(), "Pick a date", Toast.LENGTH_SHORT).show()
+        }
+        val negativeButtonClick = { dialog: DialogInterface, which: Int ->
+            dialog.dismiss()
+        }
+        val dialog = AlertDialog.Builder(requireContext())
+        val view = layoutInflater.inflate(R.layout.task_date_picker_dialog, null)
+        val startDateSpinner = view.findViewById<Button>(R.id.task_start_date_spinner)
+        val startTimeSpinner = view.findViewById<Spinner>(R.id.task_start_time_spinner)
+        val endDateSpinner = view.findViewById<Button>(R.id.task_end_date_spinner)
+        val endTimeSpinner = view.findViewById<Spinner>(R.id.task_end_time_spinner)
+
+        var timeAdapter = TimeAdapter(requireContext(),resources.getStringArray(R.array.time_arr))
+        startTimeSpinner.adapter = timeAdapter
+        endTimeSpinner.adapter = timeAdapter
+        //start
+        startDateSpinner.setOnClickListener {
+            showStartDatePickerDialog(startTimeSpinner)
+        }
+        startTimeSpinner.onItemSelectedListener = object :OnItemSelectedListener{
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                sharedTaskViewModel.setStartTime((p1 as TextView).text)
+            }
+
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+                TODO("Not yet implemented")
+            }
+        }
+        //end
+        endDateSpinner.setOnClickListener {
+            showEndDatePickerDialog(endTimeSpinner)
+        }
+        endTimeSpinner.onItemSelectedListener = object:OnItemSelectedListener{
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                sharedTaskViewModel.setEndTime((p1 as TextView).text.toString())
+            }
+
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+                TODO("Not yet implemented")
+            }
+        }
+
+
+        with(dialog) {
+            setTitle("Pick a date")
+            setPositiveButton("Set date", DialogInterface.OnClickListener(positiveButtonClick))
+            setNegativeButton("Back", DialogInterface.OnClickListener(negativeButtonClick))
+            setView(view)
+            show()
+        }
 
     }
+
+    private fun showStartDatePickerDialog(spinner:Spinner){
+        val calendar = Calendar.getInstance()
+        val year = calendar.get(Calendar.YEAR)
+        val month = calendar.get(Calendar.MONTH)
+        val day = calendar.get(Calendar.DAY_OF_MONTH)
+        val datePickerDialog = DatePickerDialog(requireContext())
+        datePickerDialog.setOnDateSetListener { view, year, monnth, dayOfMonth ->
+            calendar.set(Calendar.YEAR,year)
+            calendar.set(Calendar.MONTH,month)
+            calendar.set(Calendar.DAY_OF_MONTH,day)
+            sharedTaskViewModel.setStartDate(calendar.time.toInstant().toEpochMilli(),resources.getStringArray(R.array.time_arr)[spinner.selectedItemPosition] )
+        }
+        datePickerDialog.show()
+    }
+    private fun showEndDatePickerDialog(spinner:Spinner){
+        val calendar = Calendar.getInstance()
+        val year = calendar.get(Calendar.YEAR)
+        val month = calendar.get(Calendar.MONTH)
+        val day = calendar.get(Calendar.DAY_OF_MONTH)
+        val datePickerDialog = DatePickerDialog(requireContext())
+        datePickerDialog.setOnDateSetListener { view, year, monnth, dayOfMonth ->
+            calendar.set(Calendar.YEAR,year)
+            calendar.set(Calendar.MONTH,month)
+            calendar.set(Calendar.DAY_OF_MONTH,day)
+            sharedTaskViewModel.setEndDate(calendar.time.toInstant().toEpochMilli(),resources.getStringArray(R.array.time_arr)[spinner.selectedItemPosition] )
+
+        }
+        var a = resources.getStringArray(R.array.time_arr)
+
+        datePickerDialog.show()
+    }
+
+    class TimeAdapter(var ctx: Context, var arr :Array<String>):ArrayAdapter<String>(ctx,android.R.layout.simple_spinner_item,arr){
+        override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
+            val textView = TextView(ctx)
+            textView.setPadding(30,20,30,20)
+            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
+            textView.text = arr.get(position)
+            return textView
+        }
+    }
+
+
+}
     class PopupCloseWorker(ctx: Context, attr:WorkerParameters, var popupWindow:PopupWindow ):Worker(ctx,attr){
         override fun doWork(): Result {
             popupWindow.dismiss()
@@ -198,4 +310,3 @@ class ProjectFragment : Fragment() {
 
     }
 
-}

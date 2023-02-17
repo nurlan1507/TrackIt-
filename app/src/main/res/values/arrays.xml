@@ -7,4 +7,11 @@
         <item>40sp</item>
         <item>100sp</item>
     </array>
+    <array name="time_arr">
+        <item>09:00</item>
+        <item>12:00</item>
+        <item>15:00</item>
+        <item>18:00</item>
+        <item>23:59</item>
+    </array>
 </resources>

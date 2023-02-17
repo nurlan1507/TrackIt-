@@ -17,8 +17,7 @@ class TaskRepository:ITaskRepository {
                 "title" to task.title,
                 "description" to task.description,
                 "startDate" to task.startDate,
-                "endDate" to task.endDate,
-
+                "endDate" to task.endDate!!,
             )
             db.collection("projects").document(projectId).collection("tasks").add(taskMap).await()
             //add users with worker
