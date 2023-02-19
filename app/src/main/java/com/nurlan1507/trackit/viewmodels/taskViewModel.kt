@@ -6,8 +6,11 @@ import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.nurlan1507.trackit.data.Task
 import com.nurlan1507.trackit.data.User
+import com.nurlan1507.trackit.repositories.TaskRepository
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -17,6 +20,7 @@ import java.time.format.DateTimeFormatter
 import java.util.*
 
 class TaskViewModel:ViewModel(){
+    private val taskRepository = TaskRepository()
     val zero = 0
     private var _tasks:MutableLiveData<List<Task>> = MutableLiveData<List<Task>>(listOf())
     val tasks:LiveData<List<Task>> = _tasks
@@ -94,7 +98,11 @@ class TaskViewModel:ViewModel(){
         _task.value?.title = title
         _task.value?.description = description
         _task.value?.users = userList
+        val newTask = Task(_task.value!!.taskId, _task.value!!.title,"d", "s",_startDate.value!!, _endDate.value,userList )
         //repository
+        viewModelScope.launch {
+//            taskRepository.createTask()
+        }
 
 
     }
